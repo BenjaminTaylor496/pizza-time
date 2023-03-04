@@ -1,36 +1,56 @@
 import React from 'react';
 
-export const PizzaBlock = ({ title, price }) => {
-	const [addPizza, setAddPizza] = React.useState(0);
-	// !!При каждом изменении useState компонент будет перерисовываться
+export const PizzaBlock = ({ title, price, imageUrl, sizes, types }) => {
+	const [activeType, setActiveType] = React.useState(0);
+	const [activeSize, setActiveSize] = React.useState(0);
 
-	const onClickQty = () => {
-		// const onClickQuantity <= количество
-		setAddPizza(addPizza + 1);
-	};
+	const pizzaTypes = ['тонкое', 'традиционное'];
+
+	// 	const [addPizza, setAddPizza] = React.useState(0);
+	// 	// !!При каждом изменении useState компонент будет перерисовываться
+
+	// 	const onClickQty = () => {
+	// 		// const onClickQuantity <= количество
+	// 		setAddPizza(addPizza + 1);
+	// 	};
 
 	return (
 		<div className='pizza-block'>
-			<img
-				className='pizza-block__image'
-				src='https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg'
-				alt='Pizza'
-			/>
+			<img className='pizza-block__image' src={imageUrl} alt='Pizza' />
 			<h4 className='pizza-block__title'>{title}</h4>
 			<div className='pizza-block__selector'>
 				<ul>
-					<li className='active'>тонкое</li>
-					<li>традиционное</li>
+					{types.map(pizzaTypeIndex => (
+						<li
+							key={pizzaTypeIndex}
+							/**Тег <li> является родительским(дальше р\т).
+							 * И если р\т в списке который будет рендерится с помощью .map не будет содержать "ключ"(key) с каким-то уникальным значением
+							 * То Реакт может некорректно отрендерить список. Под "уникальным значением" понимается значение в рамках конкретного блока
+							 * Например в данном примере у меня уникален "pizzaTypeIndex"*/
+							onClick={
+								() => setActiveType(pizzaTypeIndex)
+								/** Если данная анонимная функция выполняет только 1 функцию, тогда можно не создавать отдельную переменную, где хранится функция */
+							}
+							className={activeType === pizzaTypeIndex ? 'active' : ''}>
+							{pizzaTypes[pizzaTypeIndex]}
+						</li>
+						/**То, что находитя в <li> поменял 0 и 1 из 'pizzas.json' на то, что находится в pizzaTypes*/
+					))}
 				</ul>
 				<ul>
-					<li className='active'>26 см.</li>
-					<li>30 см.</li>
-					<li>40 см.</li>
+					{sizes.map((size, index) => (
+						<li
+							key={size}
+							onClick={() => setActiveSize(index)}
+							className={activeSize === index ? 'active' : ''}>
+							{size} cм.
+						</li>
+					))}
 				</ul>
 			</div>
 			<div className='pizza-block__bottom'>
 				<div className='pizza-block__price'>от {price} ₽</div>
-				<button onClick={onClickQty} className='button button--outline button--add'>
+				<button className='button button--outline button--add'>
 					<svg
 						width='12'
 						height='12'
@@ -43,7 +63,7 @@ export const PizzaBlock = ({ title, price }) => {
 						/>
 					</svg>
 					<span>Добавить</span>
-					<i>{addPizza}</i>
+					<i>0</i>
 				</button>
 			</div>
 		</div>

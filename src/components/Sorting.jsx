@@ -1,4 +1,9 @@
+import React from 'react';
+
 export const Sorting = () => {
+	const [isVisible, setIsVisible] = React.useState(false);
+
+	const sortBy = ['популярности', 'цене', 'алфавиту'];
 	return (
 		<div className='sort'>
 			<div className='sort__label'>
@@ -16,13 +21,13 @@ export const Sorting = () => {
 				<b>Сортировка по:</b>
 				<span>популярности</span>
 			</div>
-			<div className='sort__popup'>
-				<ul>
-					<li className='active'>популярности</li>
-					<li>цене</li>
-					<li>алфавиту</li>
-				</ul>
-			</div>
+			{isVisible && (
+				<div className='sort__popup'>
+					<ul>
+						<li>{sortBy}</li>
+					</ul>
+				</div>
+			)}
 		</div>
 	);
 };
