@@ -4,10 +4,12 @@ import { Header } from './components/Header';
 import { Categories } from './components/Categories';
 import { Sorting } from './components/Sorting';
 import { PizzaBlock } from './components/PizzaBlock';
+import { MyPizzaSkeleton } from './components/PizzaBlock/PizzaSkeleton';
 
 import pizzas from './assets/pizzas.json';
 
 function App() {
+	const [pageIsLoading, setPageIsLoading] = React.useState(false);
 	return (
 		<div className='wrapper'>
 			<Header />
@@ -17,10 +19,10 @@ function App() {
 						<Categories />
 						<Sorting />
 					</div>
-					<h2 className='content__title'>Всё меню</h2>
+					<h2 className='content__title'>Все пиццы:</h2>
 					<div className='content__items'>
 						{pizzas.map(obj => (
-							<PizzaBlock
+							<MyPizzaSkeleton
 								/**Когда react производит рендеринг через .map, он не понимает чем 1 компонент отличается от другого
 								 * Если родительский компонент произведет перерисовку, тогда должны указать ключи для тех элементов, которые будут рендериться автоматически
 								 * Благодаря этим ключам react будет понимать что да как сделать. Это нужно для того чтобы когда react будет делать перерендеры элемента

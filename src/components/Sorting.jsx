@@ -2,8 +2,16 @@ import React from 'react';
 
 export const Sorting = () => {
 	const [isVisible, setIsVisible] = React.useState(false);
+	const [selected, setSelected] = React.useState(0);
 
 	const sortBy = ['популярности', 'цене', 'алфавиту'];
+	const sortName = sortBy[selected]; /**<= Данной переменной 1 значение меняется на другое */
+
+	const hideSortMenu = i => {
+		setSelected(i);
+		setIsVisible(false);
+	};
+
 	return (
 		<div className='sort'>
 			<div className='sort__label'>
@@ -19,12 +27,22 @@ export const Sorting = () => {
 					/>
 				</svg>
 				<b>Сортировка по:</b>
-				<span>популярности</span>
+				<span onClick={() => setIsVisible(!isVisible)}>{sortName}</span>
+				{/** При помощи {sortName} сделал так, что при выборе какого-то элемента из массива, sortBy заменит собой предыдущее значение
+				 * Например: было: Сортировка по: цене;
+				 * Стало: Сортировка по: алфавиту*/}
 			</div>
 			{isVisible && (
 				<div className='sort__popup'>
 					<ul>
-						<li>{sortBy}</li>
+						{sortBy.map((listId, i) => (
+							<li
+								key={i}
+								onClick={() => hideSortMenu(i)}
+								className={selected === i ? 'active' : ''}>
+								{listId}
+							</li>
+						))}
 					</ul>
 				</div>
 			)}

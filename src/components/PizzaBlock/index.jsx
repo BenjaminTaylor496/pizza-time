@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const PizzaBlock = ({ title, price, imageUrl, sizes, types }) => {
+export const PizzaBlock = ({ title, price, imageUrl, sizes, types, inLoad = false }) => {
 	const [activeType, setActiveType] = React.useState(0);
 	const [activeSize, setActiveSize] = React.useState(0);
 
