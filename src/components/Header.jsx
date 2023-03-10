@@ -1,32 +1,26 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import logoSvg from '../assets/img/myLogo.svg';
 
 /** В реакте когда создаются статичные файлы которые необходимо импортировать, принято писать папку 'assets' <=
  * Папка, где хранятся все статичные ресурсы */
 
-export const Header = () => {
+const Header = () => {
 	return (
 		<div className='header'>
 			<div className='container'>
-				<div className='header__logo'>
-					<img width='55' src={logoSvg} alt='Pizza logo' />
-					{/**Есть несколько способов как вставить картинку в верстку:
-					 * 1) Указать путь к папке с изображениями:src='./img/pizza-logo.svg'.
-					 * При использовании 1 метода, папка img должна находиться в public
-					 * 2) Использовать импорт. При использовании данного метода папка с изображениями будет находиться в папке src,
-					 * А так же вместо указывания пути к картинке, можно будет просто написать то название, что было использовано при импорте
-					 * Например:
-					 * import logoSvg from '../img/pizza-logo.svg
-					 * <img width='55' src={logoSvg} />
-					 */}
-					<div>
-						<h1>Pizza shop</h1>
-						<p>It's time to eat pizza</p>
+				<Link to='/'>
+					<div className='header__logo'>
+						<img width='55' src={logoSvg} alt='Pizza logo' />
+						<div>
+							<h1>Pizza shop</h1>
+							<p>It's time to eat some pizza</p>
+						</div>
 					</div>
-				</div>
+				</Link>
 				<div className='header__cart'>
-					<a href='/cart.html' className='button button--cart'>
+					<Link to='/cart' className='button button--cart'>
 						<span>52 $</span>
 						<div className='button__delimiter'></div>
 						<svg
@@ -58,9 +52,11 @@ export const Header = () => {
 							/>
 						</svg>
 						<span>3</span>
-					</a>
+					</Link>
 				</div>
 			</div>
 		</div>
 	);
 };
+
+export default Header;

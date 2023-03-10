@@ -4,7 +4,7 @@ import ContentLoader from 'react-content-loader';
 export const MyPizzaSkeleton = () => (
 	<ContentLoader
 		className='pizza-block' //Данный класс написан для того, чтобы применить стили scss от pizza-block
-		speed={2}
+		speed={1}
 		width={280}
 		height={460}
 		viewBox='0 0 280 460'
@@ -17,9 +17,3 @@ export const MyPizzaSkeleton = () => (
 		<rect x='160' y='373' rx='19' ry='19' width='120' height='40' />
 	</ContentLoader>
 );
-
-/**
- * Важные моменты при работе со Skeleton:
- * 1) Установить react-content-loader
- * 2) Посмотреть на размеры карточки или той области, где собираюсь установить Skeleton и только потом начать делать работу с ними;
- */
