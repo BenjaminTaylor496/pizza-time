@@ -16,6 +16,8 @@ const Home = () => {
 				setPizzas(json);
 				setPageIsLoading(false);
 			});
+		window.scrollTo(0, 0);
+		/** window.scrollTo() скроллит страницу при рендере на верх или вниз в зависимости от цифр, что написано в () */
 	}, []);
 
 	return (
