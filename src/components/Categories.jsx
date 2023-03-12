@@ -1,18 +1,12 @@
 import React from 'react';
 
-export const Categories = () => {
-	const [selectedIndex, setSelectedIndex] = React.useState(0);
-
-	const categories = ['Все', 'Мясные', 'Вегетарианское', 'Гриль', 'Острые', 'Закрытые'];
-
-	const onClickCategory = index => {
-		setSelectedIndex(index);
-	};
+export const Categories = ({ value, changeCategory }) => {
+	const categories = ['Все', 'Мясные', 'Вегuтарuанское', 'Грuль', 'Острые', 'Закрытые'];
 
 	return (
 		<div className='categories'>
 			<ul>
-				{categories.map((value, index) => (
+				{categories.map((categoryName, index) => (
 					/**onClick={() => onClickCategory()} <= Вызови анонимную функцию, которая вызовет функцию onClickCategory
 					 * Теперь при клике на <li> будет вызываться анонимная функция, которая внутри себя вызовет onClickCategory
 					 * onClick={() => onClickCategory()} <= это делается для того, чтобы сайт не сломался и не выдал предупреждение о том, что сайт много раз рендерится
@@ -22,12 +16,12 @@ export const Categories = () => {
 					 */
 					<li
 						key={index}
-						onClick={() => onClickCategory(index)}
-						className={selectedIndex === index ? 'active' : ''}>
-						{value}
+						onClick={() => changeCategory(index)}
+						className={value === index ? 'active' : ''}>
+						{categoryName}
 						{/** Вместо того, чтобы снова и снова переписывать одну и ту же строку кода столько раз, сколько у меня категорий
 						 * Создал массив categories, затем этот массив прогнал через .map и передал в неё 2 аргумента(value и index),
-						 * Где value - это название категории, а index -это индекс той или иной категории из массива.
+						 * Где categoryName - это название категории, а index -это индекс той или иной категории из массива.
 						 * И потом, на основе данных из массива создал компонент <li>. Т.е сказал следующее:
 						 * Посмотри сколько элементов в массиве
 						 * И исходя из этого количества создай столько же элементов <li>

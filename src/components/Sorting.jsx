@@ -1,14 +1,23 @@
 import React from 'react';
 
-export const Sorting = () => {
+const Sorting = ({ sortValue, changeSort }) => {
 	const [isVisible, setIsVisible] = React.useState(false);
-	const [selected, setSelected] = React.useState(0);
 
-	const sortBy = ['популярности', 'цене', 'алфавиту'];
-	const sortName = sortBy[selected]; /**<= Данной переменной 1 значение меняется на другое */
+	const sortBy = [
+		{ name: 'популярности (DESC)', sortProperty: 'rating' },
+		{ name: 'популярности (ASC)', sortProperty: '-rating' },
+		{ name: 'цене (DESC)', sortProperty: 'price' },
+		{ name: 'цене (ASC)', sortProperty: '-price' },
+		{ name: 'алфавиту (DESC)', sortProperty: 'alphabet' },
+		{ name: 'алфавиту (ASC)', sortProperty: '-alphabet' },
+		/**Данный массив объектов был сделан для того, чтобы когда буду выбирать сортировку пицц не передавать индекс конкретной сортировки
+		 * И чтобы в ссылку mockAPI прописать сортировку по "цене", "алфавиту" и т.д
+		 * Иными словами, если будет выбрана сортировка по "популярности" передавать sortProperty
+		 */
+	];
 
-	const hideSortMenu = i => {
-		setSelected(i);
+	const changeSortMenu = i => {
+		changeSort(i);
 		setIsVisible(false);
 	};
 
@@ -27,20 +36,21 @@ export const Sorting = () => {
 					/>
 				</svg>
 				<b>Сортировка по:</b>
-				<span onClick={() => setIsVisible(!isVisible)}>{sortName}</span>
+				<span onClick={() => setIsVisible(!isVisible)}>{sortValue.name}</span>
 				{/** При помощи {sortName} сделал так, что при выборе какого-то элемента из массива, sortBy заменит собой предыдущее значение
 				 * Например: было: Сортировка по: цене;
-				 * Стало: Сортировка по: алфавиту*/}
+				 * Стало: Сортировка по: алфавиту
+				 * !!! Не забыть! НЕ ПОЯВЛЯЕТСЯ СПИСОК С СОРТИРОВКОЙ! НАДО ПОФИКСИТЬ!*/}
 			</div>
 			{isVisible && (
 				<div className='sort__popup'>
 					<ul>
-						{sortBy.map((listId, i) => (
+						{sortBy.map((obj, i) => (
 							<li
 								key={i}
-								onClick={() => hideSortMenu(i)}
-								className={selected === i ? 'active' : ''}>
-								{listId}
+								onClick={() => changeSortMenu(obj.sortProperty)}
+								className={sortValue.sortProperty === obj.sortProperty ? 'active' : ''}>
+								{obj.name}
 							</li>
 						))}
 					</ul>
@@ -49,3 +59,5 @@ export const Sorting = () => {
 		</div>
 	);
 };
+
+export default Sorting;
