@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import logoSvg from '../assets/img/myLogo.svg';
+import Search from './Search';
 
 /** В реакте когда создаются статичные файлы которые необходимо импортировать, принято писать папку 'assets' <=
  * Папка, где хранятся все статичные ресурсы */
@@ -19,6 +20,7 @@ const Header = () => {
 						</div>
 					</div>
 				</Link>
+				<Search />
 				<div className='header__cart'>
 					<Link to='/cart' className='button button--cart'>
 						<span>52 $</span>
