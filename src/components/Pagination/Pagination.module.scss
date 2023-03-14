@@ -1,0 +1,31 @@
+.pages {
+	li {
+		display: inline-block;
+	}
+	a {
+		display: inline-block;
+		color: #005c02;
+		text-align: center;
+		width: 45px;
+		height: 45px;
+		line-height: 42px;
+		border: 1px solid #005c02;
+		border-radius: 30px;
+		margin-right: 10px;
+		cursor: pointer;
+
+		&:hover {
+			background-color: #005c02;
+			color: #fff; /**<== Цвет цифр, при наведении на них курсора */
+		}
+	}
+	:global {
+		.selected {
+			/**↑↑↑↑ Выбранная страница */
+			a {
+				background-color: #005c02;
+				color: #fff;
+			}
+		}
+	}
+}

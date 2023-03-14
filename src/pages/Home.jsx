@@ -4,11 +4,13 @@ import Categories from '../components/Categories';
 import Sorting from '../components/Sorting';
 import { PizzaBlock } from '../components/PizzaBlock';
 import { MyPizzaSkeleton } from '../components/PizzaBlock/PizzaSkeleton';
+import Pagination from '../components/Pagination';
 
 const Home = ({ searchValue }) => {
 	const [pizzas, setPizzas] = React.useState([]);
 	const [pageIsLoading, setPageIsLoading] = React.useState(true);
 	const [categoryIndex, setCategoryIndex] = React.useState(0);
+	const [currentPage, setCurrentPage] = React.useState(1);
 	const [sortType, setSortingType] = React.useState({
 		name: 'популярности',
 		sortProperty: 'rating',
@@ -24,7 +26,7 @@ const Home = ({ searchValue }) => {
 		const search = searchValue ? `&search=${searchValue}` : '';
 
 		fetch(
-			`https://63fccb13677c41587314110b.mockapi.io/pizza-list?${category}&sortBy=${sortBy}&order=${order}${search}`,
+			`https://63fccb13677c41587314110b.mockapi.io/pizza-list?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
 		)
 			.then(res => res.json())
 			.then(json => {
@@ -37,6 +39,7 @@ const Home = ({ searchValue }) => {
 		categoryIndex,
 		sortType,
 		searchValue,
+		currentPage,
 	]); /**useEffect следи за переменной React.useEffect(()=> {},[categoryIndex]) */
 	// const sortBy = sortType.sortProperty.replace('-', '');
 	// const click = console.log(sortBy);
@@ -61,6 +64,7 @@ const Home = ({ searchValue }) => {
 			</div>
 			<h2 className='content__title'>Все пиццы:</h2>
 			<div className='content__items'>{pageIsLoading ? skeletons : items}</div>
+			<Pagination onChangePage={num => setCurrentPage(num)} />
 		</>
 	);
 };
