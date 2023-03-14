@@ -1,20 +1,18 @@
 .main {
 	position: relative;
-	left: -180px;
 }
 
 .searchPlace {
-	bottom: 1px solid rgba(0, 0, 0, 0.1);
+	border: 1px solid rgba(0, 0, 0, 0.1);
 	padding: 8px 20px;
 	padding-left: 35px;
-	width: 220px;
+	width: 400px;
 	border-radius: 12px;
 	font-size: 16px;
 	transition: all 0.15s ease-in-out;
 
 	&:focus {
-		border: 1px solid rgba(0, 0, 0, 0.2);
-		width: 450px;
+		border: 1px solid rgba(0, 0, 0, 0.3);
 	}
 }
 
@@ -24,5 +22,19 @@
 	opacity: 0.4;
 	position: absolute;
 	left: 7px;
-	top: 8px;
+	top: 9px;
+}
+
+.clearInput {
+	width: 22px;
+	height: 22px;
+	opacity: 0.3;
+	position: absolute;
+	right: 9px;
+	top: 8.5px;
+	cursor: pointer;
+
+	&:hover {
+		opacity: 0.7;
+	}
 }
