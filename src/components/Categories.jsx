@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Categories = ({ value, changeCategory }) => {
+const Categories = ({ value, changeCategory }) => {
 	const categories = ['Все', 'Мясные', 'Вегuтарuанское', 'Грuль', 'Острые', 'Закрытые'];
 
 	return (
@@ -32,3 +32,5 @@ export const Categories = ({ value, changeCategory }) => {
 		</div>
 	);
 };
+
+export default Categories;

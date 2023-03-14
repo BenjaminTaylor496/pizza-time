@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Categories } from '../components/Categories';
+import Categories from '../components/Categories';
 import Sorting from '../components/Sorting';
 import { PizzaBlock } from '../components/PizzaBlock';
 import { MyPizzaSkeleton } from '../components/PizzaBlock/PizzaSkeleton';
@@ -22,7 +22,7 @@ const Home = () => {
 		const category = categoryIndex > 0 ? `category=${categoryIndex}` : '';
 
 		fetch(
-			`https://63fccb13677c41587314110b.mockapi.io/pizza-list?${category}&sortBy=${sortBy}&border=${order}`,
+			`https://63fccb13677c41587314110b.mockapi.io/pizza-list?${category}&sortBy=${sortBy}&order=${order}`,
 		)
 			.then(res => res.json())
 			.then(json => {
@@ -35,12 +35,14 @@ const Home = () => {
 		categoryIndex,
 		sortType,
 	]); /**useEffect следи за переменной React.useEffect(()=> {},[categoryIndex]) */
-
+	// const sortBy = sortType.sortProperty.replace('-', '');
+	// const click = console.log(sortBy);
 	return (
 		<>
 			<div className='content__top'>
+				{/* <button onClick={click}> CheckSortBy</button> */}
 				<Categories value={categoryIndex} changeCategory={id => setCategoryIndex(id)} />
-				<Sorting sortValue={sortType} changeSort={id => setSortingType(id)} />
+				<Sorting value={sortType} changeSort={id => setSortingType(id)} />
 			</div>
 			<h2 className='content__title'>Все пиццы:</h2>
 			<div className='content__items'>
