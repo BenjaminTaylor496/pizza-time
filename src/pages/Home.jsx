@@ -5,8 +5,13 @@ import Sorting from '../components/Sorting';
 import { PizzaBlock } from '../components/PizzaBlock';
 import { MyPizzaSkeleton } from '../components/PizzaBlock/PizzaSkeleton';
 import Pagination from '../components/Pagination';
+import { SearchContext } from '../App';
 
-const Home = ({ searchValue }) => {
+const Home = () => {
+	const { searchValue } = React.useContext(SearchContext);
+	/**context слушает изменение контекста. Если SearchContext изменится, весь компонент перерисуется.
+	 * И в случае его изменении, компоненты, где был использован useContext() будут перерисовываться.*/
+
 	const [pizzas, setPizzas] = React.useState([]);
 	const [pageIsLoading, setPageIsLoading] = React.useState(true);
 	const [categoryIndex, setCategoryIndex] = React.useState(0);

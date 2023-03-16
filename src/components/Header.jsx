@@ -7,7 +7,7 @@ import Search from './Search';
 /** В реакте когда создаются статичные файлы которые необходимо импортировать, принято писать папку 'assets' <=
  * Папка, где хранятся все статичные ресурсы */
 
-const Header = ({ searchValue, setSearchValue }) => {
+const Header = () => {
 	return (
 		<div className='header'>
 			<div className='container'>
@@ -20,7 +20,7 @@ const Header = ({ searchValue, setSearchValue }) => {
 						</div>
 					</div>
 				</Link>
-				<Search searchValue={searchValue} setSearchValue={setSearchValue} />
+				<Search />
 				<div className='header__cart'>
 					<Link to='/cart' className='button button--cart'>
 						<span>52 $</span>
