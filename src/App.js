@@ -1,4 +1,7 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+/**Хук useSelector отвечает за вытаскивание данных из хранилища. Что-то похожее на useContext
+ * useDispatch - Хук который говорит "сделай что-то". useDispatch возвращает функцию */
 import { Routes, Route } from 'react-router-dom';
 
 import Header from './components/Header';
@@ -9,6 +12,17 @@ import Cart from './pages/Cart';
 import './scss/app.scss';
 
 export const SearchContext = React.createContext('');
+
+/**
+ *     Когда НУЖНО использовать redux вместо context ?
+ * Так же redux необходим если нужно сделать большое приложение
+ * Или же если нужно сделать так, чтобы компоненты не делали перерисовку
+ * И если много данных хранятся в приложении. Тогда лучше использовать Redux
+ * ================================================================
+ * А если мало данных или приложение маленькое и нет разницы на перерисовку компонентов,
+ * То тогда можно использовать useContext. И приложение не будет тормозить при перерисовке компонентов
+ * Но если приложение небольшое, то от перерисовки оно не пострадает и не будет
+ */
 
 const App = () => {
 	const [searchValue, setSearchValue] = React.useState();
