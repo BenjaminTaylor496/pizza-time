@@ -1,23 +1,28 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-const Sorting = ({ value, changeSort }) => {
+import { setSort } from '../redux/slices/filterSlice';
+
+const Sorting = () => {
+	const dispatch = useDispatch();
+	const sort = useSelector(state => state.filter.sort);
+
 	const [isVisible, setIsVisible] = React.useState(false);
-
 	const sortBy = [
-		{ name: 'популярности (DESC)', sortProperty: 'rating' },
-		{ name: 'популярности (ASC)', sortProperty: '-rating' },
-		{ name: 'цене (DESC)', sortProperty: 'price' },
-		{ name: 'цене (ASC)', sortProperty: '-price' },
-		{ name: 'алфавиту (DESC)', sortProperty: 'title' },
-		{ name: 'алфавиту (ASC)', sortProperty: '-title' },
+		{ title: 'популярности (DESC)', sortProperty: 'rating' },
+		{ title: 'популярности (ASC)', sortProperty: '-rating' },
+		{ title: 'цене (DESC)', sortProperty: 'price' },
+		{ title: 'цене (ASC)', sortProperty: '-price' },
+		{ title: 'алфавиту (DESC)', sortProperty: 'title' },
+		{ title: 'алфавиту (ASC)', sortProperty: '-title' },
 		/**Данный массив объектов был сделан для того, чтобы когда буду выбирать сортировку пицц не передавать индекс конкретной сортировки
 		 * И чтобы в ссылку mockAPI прописать сортировку по "цене", "алфавиту" и т.д
 		 * Иными словами, если будет выбрана сортировка по "популярности" передавать то, что есть в sortProperty
 		 */
 	];
 
-	const changeSortMenu = i => {
-		changeSort(i);
+	const changeSortMenu = obj => {
+		dispatch(setSort());
 		setIsVisible(false);
 	};
 
@@ -36,8 +41,8 @@ const Sorting = ({ value, changeSort }) => {
 					/>
 				</svg>
 				<b>Сортировка по:</b>
-				<span onClick={() => setIsVisible(!isVisible)}>{value.name}</span>
-				{/** При помощи {sortName} сделал так, что при выборе какого-то элемента из массива, sortBy заменит собой предыдущее значение
+				<span onClick={() => setIsVisible(!isVisible)}>{sort.title}</span>
+				{/** При помощи {sorttitle} сделал так, что при выборе какого-то элемента из массива, sortBy заменит собой предыдущее значение
 				 * Например: было: Сортировка по: цене;
 				 * Стало: Сортировка по: алфавиту*/}
 			</div>
@@ -48,8 +53,8 @@ const Sorting = ({ value, changeSort }) => {
 							<li
 								key={i}
 								onClick={() => changeSortMenu(obj)}
-								className={value.sortProperty === obj.sortProperty ? 'active' : ''}>
-								{obj.name}
+								className={sort.sortProperty === obj.sortProperty ? 'active' : ''}>
+								{obj.title}
 							</li>
 						))}
 					</ul>

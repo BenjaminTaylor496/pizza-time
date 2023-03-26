@@ -1,5 +1,7 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { setCategoryId } from '../redux/slices/filterSlice';
 import Categories from '../components/Categories';
 import Sorting from '../components/Sorting';
 import { PizzaBlock } from '../components/PizzaBlock';
@@ -8,26 +10,31 @@ import Pagination from '../components/Pagination';
 import { SearchContext } from '../App';
 
 const Home = () => {
+	const dispatch = useDispatch();
+	//Вытаскиваю хук useDispatch
+	const categoryId = useSelector(state => state.filter.categoryId);
+	/**Функция categoryId была создана для того, чтобы потом вытащить state
+	 * Иными словами,c помощью useSelector возвращаю то, что нужно из всего state и передаем в переменную categoryId*/
+
+	const sortType = useSelector(state => state.filter.sort.sortProperty);
 	const { searchValue } = React.useContext(SearchContext);
 	/**context слушает изменение контекста. Если SearchContext изменится, весь компонент перерисуется.
 	 * И в случае его изменении, компоненты, где был использован useContext() будут перерисовываться.*/
-
 	const [pizzas, setPizzas] = React.useState([]);
 	const [pageIsLoading, setPageIsLoading] = React.useState(true);
-	const [categoryIndex, setCategoryIndex] = React.useState(0);
 	const [currentPage, setCurrentPage] = React.useState(1);
-	const [sortType, setSortingType] = React.useState({
-		name: 'популярности',
-		sortProperty: 'rating',
-	});
+
+	const changeCategory = id => {
+		dispatch(setCategoryId(id));
+	};
 
 	React.useEffect(() => {
 		setPageIsLoading(true);
 		/**Перед отправкой запроса на бекэнд setPageIsloading переводится на true, чтобы при сортировке по категориям был виден скелетон карточек  */
 
-		const sortBy = sortType.sortProperty.replace('-', '');
-		const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
-		const category = categoryIndex > 0 ? `category=${categoryIndex}` : '';
+		const sortBy = sortType.replace('-', '');
+		const order = sortType.includes('-') ? 'asc' : 'desc';
+		const category = categoryId > 0 ? `category=${categoryId}` : '';
 		const search = searchValue ? `&search=${searchValue}` : '';
 
 		fetch(
@@ -41,7 +48,7 @@ const Home = () => {
 		window.scrollTo(0, 0);
 		/** window.scrollTo() скроллит страницу при рендере на верх или вниз в зависимости от цифр, что написано в () */
 	}, [
-		categoryIndex,
+		categoryId,
 		sortType,
 		searchValue,
 		currentPage,
@@ -64,8 +71,8 @@ const Home = () => {
 		<>
 			<div className='content__top'>
 				{/* <button onClick={click}> CheckSortBy</button> */}
-				<Categories value={categoryIndex} changeCategory={id => setCategoryIndex(id)} />
-				<Sorting value={sortType} changeSort={id => setSortingType(id)} />
+				<Categories value={categoryId} changeCategory={changeCategory} />
+				<Sorting />
 			</div>
 			<h2 className='content__title'>Все пиццы:</h2>
 			<div className='content__items'>{pageIsLoading ? skeletons : items}</div>

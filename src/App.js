@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 /**Хук useSelector отвечает за вытаскивание данных из хранилища. Что-то похожее на useContext
  * useDispatch - Хук который говорит "сделай что-то". useDispatch возвращает функцию */
 import { Routes, Route } from 'react-router-dom';
@@ -11,7 +10,7 @@ import Cart from './pages/Cart';
 
 import './scss/app.scss';
 
-export const SearchContext = React.createContext('');
+export const SearchContext = React.createContext();
 
 /**
  *     Когда НУЖНО использовать redux вместо context ?

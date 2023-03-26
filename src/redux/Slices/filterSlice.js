@@ -1,25 +1,31 @@
+/** Отвечает за фильтрацию товара в приложении */
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-	value: 0,
+	categoryId: 0,
+	sort: {
+		title: 'популярности',
+		sortProperty: 'rating',
+	},
 };
 
-export const filterSlice = createSlice({
-	name: 'filter',
-	initialState: initialState,
+const filterSlice = createSlice({
+	name: 'filters' /**Название слайса необходимо для того, чтобы slice понимал где - что менять и откуда что вытаскивать*/,
+	initialState /**Первое состояние слайса(изначальное) */,
+
+	//Actions(методы, действия):
 	reducers: {
-		increment: state => {
-			state.value += 1;
+		setCategoryId(state, action) {
+			state.categoryId = action.payload; //В state сохраняется, то, что приходит в action.payload
+			/**Т.е придет объект, который будет содержать в себе обязательно любой action,
+			 * Который содержит в себе: какую-то команду или любую информацию. Обычно любая информация хранится в payload */
 		},
-		decrement: state => {
-			state.value -= 1;
-		},
-		incrementByAmount: (state, action) => {
-			state.value += action.payload;
+		setSort(state, action) {
+			state.sort = action.payload;
 		},
 	},
 });
 
-export const { increment, decrement, incrementByAmount } = filterSlice.actions;
+export const { setCategoryId, setSort } = filterSlice.actions;
 
 export default filterSlice.reducer;
