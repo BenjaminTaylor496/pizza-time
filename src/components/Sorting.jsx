@@ -3,26 +3,27 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { setSort } from '../redux/slices/filterSlice';
 
+const list = [
+	{ title: 'популярности (DESC)', sortProperty: 'rating' },
+	{ title: 'популярности (ASC)', sortProperty: '-rating' },
+	{ title: 'цене (DESC)', sortProperty: 'price' },
+	{ title: 'цене (ASC)', sortProperty: '-price' },
+	{ title: 'алфавиту (DESC)', sortProperty: 'title' },
+	{ title: 'алфавиту (ASC)', sortProperty: '-title' },
+	/**Данный массив объектов был сделан для того, чтобы когда буду выбирать сортировку пицц не передавать индекс конкретной сортировки
+	 * И чтобы в ссылку mockAPI прописать сортировку по "цене", "алфавиту" и т.д
+	 * Иными словами, если будет выбрана сортировка по "популярности" передавать то, что есть в sortProperty
+	 */
+];
+
 const Sorting = () => {
 	const dispatch = useDispatch();
 	const sort = useSelector(state => state.filter.sort);
 
 	const [isVisible, setIsVisible] = React.useState(false);
-	const sortBy = [
-		{ title: 'популярности (DESC)', sortProperty: 'rating' },
-		{ title: 'популярности (ASC)', sortProperty: '-rating' },
-		{ title: 'цене (DESC)', sortProperty: 'price' },
-		{ title: 'цене (ASC)', sortProperty: '-price' },
-		{ title: 'алфавиту (DESC)', sortProperty: 'title' },
-		{ title: 'алфавиту (ASC)', sortProperty: '-title' },
-		/**Данный массив объектов был сделан для того, чтобы когда буду выбирать сортировку пицц не передавать индекс конкретной сортировки
-		 * И чтобы в ссылку mockAPI прописать сортировку по "цене", "алфавиту" и т.д
-		 * Иными словами, если будет выбрана сортировка по "популярности" передавать то, что есть в sortProperty
-		 */
-	];
 
 	const changeSortMenu = obj => {
-		dispatch(setSort());
+		dispatch(setSort(obj));
 		setIsVisible(false);
 	};
 
@@ -42,14 +43,14 @@ const Sorting = () => {
 				</svg>
 				<b>Сортировка по:</b>
 				<span onClick={() => setIsVisible(!isVisible)}>{sort.title}</span>
-				{/** При помощи {sorttitle} сделал так, что при выборе какого-то элемента из массива, sortBy заменит собой предыдущее значение
+				{/** При помощи {sorttitle} сделал так, что при выборе какого-то элемента из массива, list заменит собой предыдущее значение
 				 * Например: было: Сортировка по: цене;
 				 * Стало: Сортировка по: алфавиту*/}
 			</div>
 			{isVisible && (
 				<div className='sort__popup'>
 					<ul>
-						{sortBy.map((obj, i) => (
+						{list.map((obj, i) => (
 							<li
 								key={i}
 								onClick={() => changeSortMenu(obj)}

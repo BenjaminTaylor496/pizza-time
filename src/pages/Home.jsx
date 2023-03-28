@@ -12,11 +12,12 @@ import { SearchContext } from '../App';
 const Home = () => {
 	const dispatch = useDispatch();
 	//Вытаскиваю хук useDispatch
-	const categoryId = useSelector(state => state.filter.categoryId);
-	/**Функция categoryId была создана для того, чтобы потом вытащить state
-	 * Иными словами,c помощью useSelector возвращаю то, что нужно из всего state и передаем в переменную categoryId*/
-
-	const sortType = useSelector(state => state.filter.sort.sortProperty);
+	const { sort, categoryId } = useSelector(state => state.filter);
+	/** 2 useSelector-а можно превратить в 1, это не обязательно, но это помогает в сокращении кода.
+	 * Тем более, если обращаюсь к одному и тому же filter.
+	 * Переменные categoryId и sort были созданы для того, чтобы потом вытащить state
+	 * Иными словами,c помощью useSelector возвращаю то, что нужно из всего state и передаю в переменную {categoryId и sort}*/
+	const sortType = sort.sortProperty;
 	const { searchValue } = React.useContext(SearchContext);
 	/**context слушает изменение контекста. Если SearchContext изменится, весь компонент перерисуется.
 	 * И в случае его изменении, компоненты, где был использован useContext() будут перерисовываться.*/
