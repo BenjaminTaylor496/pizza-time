@@ -89,11 +89,11 @@ const Cart = () => {
 						</div>
 						<div className='cart__item-count'>
 							<div className='button button--outline button--circle cart__item-count-minus'>
-								<img src={plus} alt='df' />
+								<img src={minus} alt='minus' />
 							</div>
 							<b>2</b>
 							<div className='button button--outline button--circle cart__item-count-plus'>
-								<img src={minus} alt='minus' />
+								<img src={plus} alt='plus' />
 							</div>
 						</div>
 						<div className='cart__item-price'>

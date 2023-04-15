@@ -1,7 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 
-import { setCategoryId } from '../redux/slices/filterSlice';
+import { setCategoryId, setCurrentPage } from '../redux/slices/filterSlice';
 import Categories from '../components/Categories';
 import Sorting from '../components/Sorting';
 import { PizzaBlock } from '../components/PizzaBlock';
@@ -12,7 +13,7 @@ import { SearchContext } from '../App';
 const Home = () => {
 	const dispatch = useDispatch();
 	//Вытаскиваю хук useDispatch
-	const { sort, categoryId } = useSelector(state => state.filter);
+	const { sort, categoryId, currentPage } = useSelector(state => state.filter);
 	/** 2 useSelector-а можно превратить в 1, это не обязательно, но это помогает в сокращении кода.
 	 * Тем более, если обращаюсь к одному и тому же filter.
 	 * Переменные categoryId и sort были созданы для того, чтобы потом вытащить state
@@ -23,10 +24,13 @@ const Home = () => {
 	 * И в случае его изменении, компоненты, где был использован useContext() будут перерисовываться.*/
 	const [pizzas, setPizzas] = React.useState([]);
 	const [pageIsLoading, setPageIsLoading] = React.useState(true);
-	const [currentPage, setCurrentPage] = React.useState(1);
 
 	const changeCategory = id => {
 		dispatch(setCategoryId(id));
+	};
+
+	const onChangePage = pageNum => {
+		dispatch(setCurrentPage(pageNum));
 	};
 
 	React.useEffect(() => {
@@ -38,12 +42,13 @@ const Home = () => {
 		const category = categoryId > 0 ? `category=${categoryId}` : '';
 		const search = searchValue ? `&search=${searchValue}` : '';
 
-		fetch(
-			`https://63fccb13677c41587314110b.mockapi.io/pizza-list?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
-		)
-			.then(res => res.json())
-			.then(json => {
-				setPizzas(json);
+		axios
+			.get(
+				`https://642e83dd8ca0fe3352d1a166.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
+			)
+			.then(res => {
+				// console.log(res);
+				setPizzas(res.data);
 				setPageIsLoading(false);
 			});
 		window.scrollTo(0, 0);
@@ -77,7 +82,7 @@ const Home = () => {
 			</div>
 			<h2 className='content__title'>Все пиццы:</h2>
 			<div className='content__items'>{pageIsLoading ? skeletons : items}</div>
-			<Pagination onChangePage={num => setCurrentPage(num)} />
+			<Pagination currentPage={currentPage} onChangePage={onChangePage} />
 		</>
 	);
 };

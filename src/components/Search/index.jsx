@@ -1,13 +1,34 @@
-import React from 'react';
+import { useContext, useState, useRef, useCallback } from 'react';
+import debounce from 'lodash.debounce';
+import { useDispatch } from 'react-redux';
 
 import styles from './Search.module.scss';
 
 import { SearchContext } from '../../App';
 
-const Search = () => {
-	const { searchValue, setSearchValue } = React.useContext(SearchContext);
-	/**Данный useContext будет ссылаться на переменную SearchContext, который находится в файле App.js
-	 * Из переменной SearchContext вытащи searchValue, setSearchValuе*/
+export const Search = () => {
+	const [value, setValue] = useState(''); //<== Локальный стэйт внутри компонента Search. Нужен для того, чтобы моментально получать информацию
+	const { setSearchValue } = useContext(SearchContext);
+	const dispatch = useDispatch;
+	const inputRef = useRef(null);
+
+	const onClickClearInput = () => {
+		dispatch(setSearchValue(''));
+		setValue(''); // Очищение поля input
+		inputRef.current.focus(); // Фокусировка в поле для ввода после очистки
+	};
+
+	const updateSearchValue = useCallback(
+		debounce(string => {
+			setSearchValue(string);
+		}, 350),
+		[],
+	); //<=== сохранение ссылки на функцию и вызов ее через 350 милисекунд
+
+	const onChangeInput = event => {
+		setValue(event.target.value); // При вызове onChangeInput будет меняться input. Данное действие сохранится моментально
+		updateSearchValue(event.target.value); //И вызывать updateSearchValue каждый раз при изменении input.
+	};
 
 	return (
 		<div className={styles.main}>
@@ -41,15 +62,16 @@ const Search = () => {
 				/>
 			</svg>
 			<input
-				onChange={event => setSearchValue(event.target.value)}
-				value={searchValue}
+				ref={inputRef}
+				value={value}
+				onChange={onChangeInput}
 				className={styles.searchPlace}
 				placeholder='Поиск пиццы... '
 			/>
 
-			{searchValue && (
+			{value && (
 				<svg
-					onClick={() => setSearchValue('')}
+					onClick={onClickClearInput}
 					className={styles.clearInput}
 					version='1.1'
 					viewBox='0 0 24 24'>
@@ -59,5 +81,3 @@ const Search = () => {
 		</div>
 	);
 };
-
-export default Search;
