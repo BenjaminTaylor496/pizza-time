@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { setSort } from '../redux/slices/filterSlice';
 
-const list = [
+export const sortList = [
 	{ title: 'популярности (DESC)', sortProperty: 'rating' },
 	{ title: 'популярности (ASC)', sortProperty: '-rating' },
 	{ title: 'цене (DESC)', sortProperty: 'price' },
@@ -43,14 +43,14 @@ const Sorting = () => {
 				</svg>
 				<b>Сортировка по:</b>
 				<span onClick={() => setIsVisible(!isVisible)}>{sort.title}</span>
-				{/** При помощи {sorttitle} сделал так, что при выборе какого-то элемента из массива, list заменит собой предыдущее значение
+				{/** При помощи {sorttitle} сделал так, что при выборе какого-то элемента из массива, sortList заменит собой предыдущее значение
 				 * Например: было: Сортировка по: цене;
 				 * Стало: Сортировка по: алфавиту*/}
 			</div>
 			{isVisible && (
 				<div className='sort__popup'>
 					<ul>
-						{list.map((obj, i) => (
+						{sortList.map((obj, i) => (
 							<li
 								key={i}
 								onClick={() => changeSortMenu(obj)}

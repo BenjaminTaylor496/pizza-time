@@ -1,29 +1,34 @@
-import React from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+import qs from 'qs';
+import { useNavigate } from 'react-router';
 
-import { setCategoryId, setCurrentPage } from '../redux/slices/filterSlice';
-import Categories from '../components/Categories';
-import Sorting from '../components/Sorting';
+import { setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
 import { PizzaBlock } from '../components/PizzaBlock';
 import { MyPizzaSkeleton } from '../components/PizzaBlock/PizzaSkeleton';
-import Pagination from '../components/Pagination';
 import { SearchContext } from '../App';
+import Categories from '../components/Categories';
+import Pagination from '../components/Pagination';
+import Sorting, { sortList } from '../components/Sorting';
 
 const Home = () => {
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	//Вытаскиваю хук useDispatch
+	const isSearch = useRef(false);
+	const isMounted = useRef(false);
+
 	const { sort, categoryId, currentPage } = useSelector(state => state.filter);
 	/** 2 useSelector-а можно превратить в 1, это не обязательно, но это помогает в сокращении кода.
 	 * Тем более, если обращаюсь к одному и тому же filter.
 	 * Переменные categoryId и sort были созданы для того, чтобы потом вытащить state
 	 * Иными словами,c помощью useSelector возвращаю то, что нужно из всего state и передаю в переменную {categoryId и sort}*/
 	const sortType = sort.sortProperty;
-	const { searchValue } = React.useContext(SearchContext);
+	const { searchValue } = useContext(SearchContext);
 	/**context слушает изменение контекста. Если SearchContext изменится, весь компонент перерисуется.
 	 * И в случае его изменении, компоненты, где был использован useContext() будут перерисовываться.*/
-	const [pizzas, setPizzas] = React.useState([]);
-	const [pageIsLoading, setPageIsLoading] = React.useState(true);
+	const [pizzas, setPizzas] = useState([]);
+	const [pageIsLoading, setPageIsLoading] = useState(true);
 
 	const changeCategory = id => {
 		dispatch(setCategoryId(id));
@@ -33,7 +38,7 @@ const Home = () => {
 		dispatch(setCurrentPage(pageNum));
 	};
 
-	React.useEffect(() => {
+	const fetchPizzas = () => {
 		setPageIsLoading(true);
 		/**Перед отправкой запроса на бекэнд setPageIsloading переводится на true, чтобы при сортировке по категориям был виден скелетон карточек  */
 
@@ -51,16 +56,51 @@ const Home = () => {
 				setPizzas(res.data);
 				setPageIsLoading(false);
 			});
+	};
+
+	useEffect(() => {
+		//Если был первый рендер, то только тогда проверяй изменениe параметров, нужно ли их вшивать в URL или не нужно
+		if (isMounted.current) {
+			const queryString = qs.stringify({
+				sortProperty: sort.sortProperty,
+				categoryId,
+				currentPage,
+			});
+
+			navigate(`?${queryString}`);
+		}
+		isMounted.current = true;
+	}, [categoryId, sortType, currentPage]);
+
+	// Если был первый рендер, то проеверяем URL-параметры и сохраняем в редуксе
+	useEffect(() => {
+		if (window.location.search) {
+			const params = qs.parse(window.location.search.substring(1));
+
+			const sort = sortList.find(obj => obj.sortProperty === params.sortProperty);
+
+			dispatch(
+				setFilters({
+					...params,
+					sort,
+				}),
+			);
+			isSearch.current = true;
+		}
+	}, []); // <=== Парсинг параметров, которые находятся в url
+
+	// Если был первый рендер, то запрашиваем пиццы
+	useEffect(() => {
 		window.scrollTo(0, 0);
 		/** window.scrollTo() скроллит страницу при рендере на верх или вниз в зависимости от цифр, что написано в () */
-	}, [
-		categoryId,
-		sortType,
-		searchValue,
-		currentPage,
-	]); /**useEffect следи за переменной React.useEffect(()=> {},[categoryIndex]) */
-	// const sortBy = sortType.sortProperty.replace('-', '');
-	// const click = console.log(sortBy);
+
+		if (!isSearch.current) {
+			fetchPizzas();
+		}
+		/**Урок Арчакова №15 про объяснение этого момента на: 18 минуте:00 секунде */
+
+		isSearch.current = false;
+	}, [categoryId, sortType, searchValue, currentPage]);
 
 	const items = pizzas.map(obj => <PizzaBlock key={obj.id} {...obj} />);
 	const skeletons = [...Array(6)].map((_, index) => <MyPizzaSkeleton key={index} />);
