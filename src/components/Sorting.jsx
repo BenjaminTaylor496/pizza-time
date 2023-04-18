@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { setSort } from '../redux/slices/filterSlice';
@@ -19,16 +19,32 @@ export const sortList = [
 const Sorting = () => {
 	const dispatch = useDispatch();
 	const sort = useSelector(state => state.filter.sort);
+	const sortRef = useRef();
 
-	const [isVisible, setIsVisible] = React.useState(false);
+	const [isVisible, setIsVisible] = useState(false);
 
 	const changeSortMenu = obj => {
 		dispatch(setSort(obj));
 		setIsVisible(false);
 	};
 
+	useEffect(() => {
+		const handleClickOutside = event => {
+			if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
+				// console.log('EVENT!');
+				setIsVisible(false);
+			}
+		};
+		document.body.addEventListener('click', handleClickOutside);
+
+		return () => {
+			// console.log('sort unmount');
+			document.body.removeEventListener('click', handleClickOutside);
+		};
+	}, []); //!!Обычно нельзя обращаться к 'document.', но так можно делать если хочу обработчик клика навешать на самый главный "родитель"
+
 	return (
-		<div className='sort'>
+		<div ref={sortRef} className='sort'>
 			<div className='sort__label'>
 				<svg
 					width='10'
