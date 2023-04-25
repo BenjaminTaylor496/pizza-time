@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import plus from '../assets/img/plus.png';
-import minus from '../assets/img/minus.png';
-import cancel from '../assets/img/cancel.png';
+import CartItems from '../components/CartItems';
 
 const Cart = () => {
+	const dispatch = useDispatch;
+	const pizzas = useSelector(state => state.cart.pizzas); // useSelector нужен для того, чтобы вывести все пиццы
+
 	return (
 		<div className='container container--cart'>
 			<div className='cart'>
@@ -75,36 +77,9 @@ const Cart = () => {
 					</div>
 				</div>
 				<div className='content__items'>
-					<div className='cart__item'>
-						<div className='cart__item-img'>
-							<img
-								className='pizza-block__image'
-								src='https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg'
-								alt='Pizza'
-							/>
-						</div>
-						<div className='cart__item-info'>
-							<h3>Сырный цыпленок</h3>
-							<p>тонкое тесто, 26 см.</p>
-						</div>
-						<div className='cart__item-count'>
-							<div className='button button--outline button--circle cart__item-count-minus'>
-								<img src={minus} alt='minus' />
-							</div>
-							<b>2</b>
-							<div className='button button--outline button--circle cart__item-count-plus'>
-								<img src={plus} alt='plus' />
-							</div>
-						</div>
-						<div className='cart__item-price'>
-							<b>50 $</b>
-						</div>
-						<div className='cart__item-remove'>
-							<div className='button button--outline button--circle'>
-								<img width={10} src={cancel} alt='cancel' />
-							</div>
-						</div>
-					</div>
+					{pizzas.map(item => (
+						<CartItems key={item.id} {...item} />
+					))}
 				</div>
 				<div className='cart__bottom'>
 					<div className='cart__bottom-details'>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import logoSvg from '../assets/img/myLogo.svg';
 import { Search } from './Search';
@@ -8,6 +9,10 @@ import { Search } from './Search';
  * Папка, где хранятся все статичные ресурсы */
 
 const Header = () => {
+	const { pizzas, totalPrice } = useSelector(state => state.cart);
+
+	const totalCount = pizzas.reduce((sum, pizza) => sum + pizza.count, 0); //Отражаемое количество пицц в header
+
 	return (
 		<div className='header'>
 			<div className='container'>
@@ -23,7 +28,7 @@ const Header = () => {
 				<Search />
 				<div className='header__cart'>
 					<Link to='/cart' className='button button--cart'>
-						<span>52 $</span>
+						<span>{totalPrice} ₽</span>
 						<div className='button__delimiter'></div>
 						<svg
 							width='18'
@@ -53,7 +58,7 @@ const Header = () => {
 								strokeLinejoin='round'
 							/>
 						</svg>
-						<span>3</span>
+						<span>{totalCount}</span>
 					</Link>
 				</div>
 			</div>
