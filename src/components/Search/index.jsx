@@ -9,11 +9,11 @@ import { SearchContext } from '../../App';
 export const Search = () => {
 	const [value, setValue] = useState(''); //<== Локальный стэйт внутри компонента Search. Нужен для того, чтобы моментально получать информацию
 	const { setSearchValue } = useContext(SearchContext);
-	const dispatch = useDispatch;
-	const inputRef = useRef(null);
+	const dispatch = useDispatch();
+	const inputRef = useRef();
 
 	const onClickClearInput = () => {
-		dispatch(setSearchValue(''));
+		setSearchValue('');
 		setValue(''); // Очищение поля input
 		inputRef.current.focus(); // Фокусировка в поле для ввода после очистки
 	};
@@ -23,7 +23,7 @@ export const Search = () => {
 			setSearchValue(string);
 		}, 350),
 		[],
-	); //<=== сохранение ссылки на функцию и вызов ее через 350 милисекунд
+	); //<=== сохранение ссылки на функцию и вызов ее через определенное время (в данном проекте  через 350 милисекунд)
 
 	const onChangeInput = event => {
 		setValue(event.target.value); // При вызове onChangeInput будет меняться input. Данное действие сохранится моментально

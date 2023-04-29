@@ -1,5 +1,5 @@
-@import './variables.scss';
-@import './libs/normalize.scss';
+@import './variables';
+@import './libs/normalize';
 
 @import './components/all';
 
@@ -10,26 +10,41 @@ body {
 .wrapper {
 	width: calc(100vw - 100px);
 	height: 100%;
-	background-color: #ffffff;
+	background-color: #fff;
 	margin: 50px auto;
 	border-radius: 10px;
 	max-width: 1400px;
 
 	@media (max-width: 645px) {
 		width: calc(100vw - 30px);
-		margin-top: 15 px;
+		margin-top: 15px;
 	}
 }
 
 .content {
 	padding: 40px 0;
 
+	&__error-info {
+		margin: 100px auto;
+		width: 500px;
+		text-align: center;
+
+		h2 {
+			font-size: 32px;
+			font-weight: 700;
+			margin-bottom: 10px;
+		}
+
+		p {
+			font-size: 20px;
+		}
+	}
+
 	&__title {
-		margin: 35px 0;
-		font-weight: 700;
+		font-weight: 800;
 		font-size: 38px;
-		margin-top: 50px;
-		margin-bottom: 40px;
+		margin-top: 60px;
+		margin-bottom: 50px;
 	}
 
 	&__items {
@@ -37,10 +52,8 @@ body {
 		grid-template-columns: repeat(4, 1fr);
 		grid-template-rows: repeat(1, 1fr);
 		grid-column-gap: 11px;
-		grid-row-gap: 25px;
 
 		@media (max-width: 1400px) {
-			/**Если ширина @media будет 1400px, то в этом случае количество колонок станет 3 */
 			grid-template-columns: repeat(3, 1fr);
 		}
 
@@ -89,11 +102,8 @@ body {
 		@media (max-width: 820px) {
 			.categories {
 				margin-top: 30px;
-				/**Отступ сверху */
 			}
-
 			flex-direction: column-reverse;
-			/** Меню сортировки поднимается наверх*/
 		}
 	}
 }
@@ -221,6 +231,27 @@ body {
 						display: none;
 					}
 				}
+
+				&:disabled {
+					opacity: 0.4;
+					border-color: #787878;
+
+					&:active {
+						transform: none;
+					}
+
+					&:hover {
+						background-color: transparent;
+
+						svg path {
+							fill: #787878;
+						}
+					}
+
+					svg path {
+						fill: #787878;
+					}
+				}
 			}
 
 			b {
@@ -338,18 +369,19 @@ body {
 		}
 	}
 
-	&--empty {
-		margin: 0 auto;
-		width: 560px;
+	&-empty {
+		margin: 80px auto;
+		width: 620px;
 		text-align: center;
 
 		h2 {
-			font-size: 32px;
-			margin-bottom: 10px;
+			font-size: 36px;
+			font-weight: 700;
+			margin-bottom: 15px;
 		}
 
 		p {
-			font-size: 18px;
+			font-size: 20px;
 			line-height: 145.4%;
 			letter-spacing: 0.01em;
 			color: #777777;

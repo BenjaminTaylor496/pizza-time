@@ -46,6 +46,7 @@ const cartSlice = createSlice({
 		},
 		clearPizzas(state) {
 			state.pizzas = [];
+			state.totalPrice = 0;
 		},
 	},
 });

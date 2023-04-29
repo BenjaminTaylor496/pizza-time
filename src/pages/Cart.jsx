@@ -3,10 +3,24 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CartItems from '../components/CartItems';
+import { CartEmpty } from '../components/CartEmpty';
+import { clearPizzas } from '../redux/slices/cartSlice';
 
 const Cart = () => {
 	const dispatch = useDispatch;
-	const pizzas = useSelector(state => state.cart.pizzas); // useSelector нужен для того, чтобы вывести все пиццы
+	const { totalPrice, pizzas } = useSelector(state => state.cart); // useSelector нужен для того, чтобы вывести все пиццы
+
+	const onClickClear = () => {
+		if (window.confirm('Хьуна боккъала а лаьа тускар дасса да?')) {
+			dispatch(clearPizzas());
+		}
+	};
+
+	if (!totalPrice) {
+		return <CartEmpty />;
+	}
+
+	const totalCount = pizzas.reduce((sum, pizza) => sum + pizza.count, 0); //Отражаемое количество пицц в header
 
 	return (
 		<div className='container container--cart'>
@@ -40,7 +54,7 @@ const Cart = () => {
 						</svg>
 						Корзина
 					</h2>
-					<div className='cart_clear'>
+					<div onClick={onClickClear} className='cart__clear'>
 						<svg
 							width='20'
 							height='20'
@@ -85,11 +99,11 @@ const Cart = () => {
 					<div className='cart__bottom-details'>
 						<span>
 							{' '}
-							Всего пицц: <b>5 шт.</b>{' '}
+							Всего пицц: <b>{totalCount} шт.</b>{' '}
 						</span>
 						<span>
 							{' '}
-							Сумма заказа: <b>220 $</b>{' '}
+							Сумма заказа: <b>{totalPrice} ₽</b>{' '}
 						</span>
 					</div>
 					<div className='cart__bottom-buttons'>
