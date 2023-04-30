@@ -47,32 +47,27 @@ const Home = () => {
 		const category = categoryId > 0 ? `category=${categoryId}` : '';
 		const search = searchValue ? `&search=${searchValue}` : '';
 
-		// await axios
-		// 	.get(
-		// 		`https://642e83dd8ca0fe3352d1a166.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
-		// 	)
-		// 	.then(res => {
-		// 		// console.log(res);
-		// 		setPizzas(res.data);
-		// 		setPageIsLoading(false);
-		// 	})
-		// 	.catch(err => {
-		// 		setPageIsLoading(false);
-		// 	});
-
-		/**В строке снизу сказано следующее:
-		 * Дождись выполнения запроса (он для себя хранит промисы (Promise));
-		 * Когда axios выполнится, свой ответ, который хранится в .then();
-		 * Вытащи его из .then() автоматически и передай его в переменную 'res'. Название переменноц может быть любое 
+		/**В строках снизу содержится следующее:
+     * С помощью try/catch отлавливай ошибки,
+     * И не смотря на то, получил "ОШИБКУ" или "ПИЦЦЫ" из бекэнда,
+     * При помощи finally выполни (setPageIsLoading(false)) <= благодаря finally setPageIsLoading(false) не дублируется, что очень упрощает понимание кода
+     * ===================================================================
+		 * Дождись выполнения запроса ;
+		 * Когда axios выполнится, свой ответ который хранится в .then(), вытащи из .then() автоматически
+		 * А затем, передай его в переменную 'res'. Название переменной может быть любое 
      
-     * То есть запрос axios.get() избавляется от .then, вытаскивает ответ(res) из .then() и передает переменной 'res'
-     * Данный метод позволяет сократить код избавляясь от .then()
 		 */
-		const res = await axios.get(
-			`https://642e83dd8ca0fe3352d1a166.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
-		);
-		setPizzas(res.data);
-		setPageIsLoading(false);
+		try {
+			const res = await axios.get(
+				`https://642e83dd8ca0fe3352d1a166.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
+			);
+			setPizzas(res.data);
+		} catch (error) {
+			console.error('Г1АЛАТ!!', error);
+			alert('Пицнаш хьа ца кхевчча');
+		} finally {
+			setPageIsLoading(false);
+		}
 
 		window.scrollTo(0, 0);
 	};
