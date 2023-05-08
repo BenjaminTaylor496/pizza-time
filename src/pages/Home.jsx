@@ -1,6 +1,6 @@
-import { useState, useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
+import { fetchPizzas } from '../redux/slices/pizzaSlice';
 import qs from 'qs';
 import { useNavigate } from 'react-router';
 
@@ -18,17 +18,17 @@ const Home = () => {
 	const isSearch = useRef(false);
 	const isMounted = useRef(false);
 
+	const { items, status } = useSelector(state => state.pizza);
 	const { sort, categoryId, currentPage } = useSelector(state => state.filter);
 	/** 2 useSelector-а можно превратить в 1, это не обязательно, но это помогает в сокращении кода.
 	 * Тем более, если обращаюсь к одному и тому же filter.
 	 * Переменные categoryId и sort были созданы для того, чтобы потом вытащить state
 	 * Иными словами,c помощью useSelector возвращаю то, что нужно из всего state и передаю в переменную {categoryId и sort}*/
+
 	const sortType = sort.sortProperty;
 	const { searchValue } = useContext(SearchContext);
 	/**context слушает изменение контекста. Если SearchContext изменится, весь компонент перерисуется.
 	 * И в случае его изменении, компоненты, где был использован useContext() будут перерисовываться.*/
-	const [pizzas, setPizzas] = useState([]);
-	const [pageIsLoading, setPageIsLoading] = useState(true);
 
 	const changeCategory = id => {
 		dispatch(setCategoryId(id));
@@ -38,8 +38,7 @@ const Home = () => {
 		dispatch(setCurrentPage(pageNum));
 	};
 
-	const fetchPizzas = async () => {
-		setPageIsLoading(true);
+	const getPizzas = async () => {
 		/**Перед отправкой запроса на бекэнд setPageIsloading переводится на true, чтобы при сортировке по категориям был виден скелетон карточек  */
 
 		const sortBy = sortType.replace('-', '');
@@ -48,32 +47,30 @@ const Home = () => {
 		const search = searchValue ? `&search=${searchValue}` : '';
 
 		/**В строках снизу содержится следующее:
-     * С помощью try/catch отлавливай ошибки,
-     * И не смотря на то, получил "ОШИБКУ" или "ПИЦЦЫ" из бекэнда,
-     * При помощи finally выполни (setPageIsLoading(false)) <= благодаря finally setPageIsLoading(false) не дублируется, что очень упрощает понимание кода
-     * ===================================================================
+		 * С помощью try/catch отлавливай ошибки,
+		 * И не смотря на то, получил "ОШИБКУ" или "ПИЦЦЫ" из бекэнда,
+		 * При помощи finally выполни (setPageIsLoading(false)) <= благодаря finally setPageIsLoading(false) не дублируется, что очень упрощает понимание кода
+		 * ===================================================================
 		 * Дождись выполнения запроса ;
 		 * Когда axios выполнится, свой ответ который хранится в .then(), вытащи из .then() автоматически
-		 * А затем, передай его в переменную 'res'. Название переменной может быть любое 
-     
+		 * А затем, передай его в переменную 'res'. Название переменной может быть любое
 		 */
-		try {
-			const res = await axios.get(
-				`https://642e83dd8ca0fe3352d1a166.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
-			);
-			setPizzas(res.data);
-		} catch (error) {
-			console.error('Г1АЛАТ!!', error);
-			alert('Пицнаш хьа ца кхевчча');
-		} finally {
-			setPageIsLoading(false);
-		}
+
+		dispatch(
+			fetchPizzas({
+				sortBy,
+				order,
+				category,
+				search,
+				currentPage,
+			}),
+		);
 
 		window.scrollTo(0, 0);
 	};
 
+	//Если был первый рендер, то только тогда проверяй изменениe параметров, нужно ли их вшивать в URL или не нужно
 	useEffect(() => {
-		//Если был первый рендер, то только тогда проверяй изменениe параметров, нужно ли их вшивать в URL или не нужно
 		if (isMounted.current) {
 			const queryString = qs.stringify({
 				sortProperty: sort.sortProperty,
@@ -86,8 +83,15 @@ const Home = () => {
 		isMounted.current = true;
 	}, [categoryId, sortType, currentPage]);
 
-	// Если был первый рендер, то проеверяем URL-параметры и сохраняем в редуксе
+	// Если был первый рендер, то запрашиваем пиццы
 	useEffect(() => {
+		getPizzas();
+
+		isSearch.current = false;
+	}, [categoryId, sortType, searchValue, currentPage]);
+
+	useEffect(() => {
+		// Если был первый рендер, то проеверяем URL-параметры и сохраняем в редуксе
 		if (window.location.search) {
 			const params = qs.parse(window.location.search.substring(1));
 
@@ -103,21 +107,8 @@ const Home = () => {
 		}
 	}, []); // <=== Парсинг параметров, которые находятся в url
 
-	// Если был первый рендер, то запрашиваем пиццы
-	useEffect(() => {
-		window.scrollTo(0, 0);
-		/** window.scrollTo() скроллит страницу при рендере на верх или вниз в зависимости от цифр, что написано в () */
-
-		if (!isSearch.current) {
-			fetchPizzas();
-		}
-		/**Урок Арчакова №15 про объяснение этого момента на: 18 минуте:00 секунде */
-
-		isSearch.current = false;
-	}, [categoryId, sortType, searchValue, currentPage]);
-
-	const items = pizzas.map(obj => <PizzaBlock key={obj.id} {...obj} />);
-	const skeletons = [...Array(6)].map((_, index) => <MyPizzaSkeleton key={index} />);
+	const pizza = items.map(obj => <PizzaBlock key={obj.id} {...obj} />);
+	const skeletons = [...Array(4)].map((_, index) => <MyPizzaSkeleton key={index} />);
 
 	/**const items = pizzas.filter(obj => {
 	  if (obj.title.toLowerCase().includes(searchValue.toLowerCase)) {
@@ -135,7 +126,15 @@ const Home = () => {
 				<Sorting />
 			</div>
 			<h2 className='content__title'>Все пиццы:</h2>
-			<div className='content__items'>{pageIsLoading ? skeletons : items}</div>
+			{status === 'error' ? (
+				<div className='content_errorInfo'>
+					<h2>Что-то пошло не по плану...</h2>
+					<p>К большому сожалению произошла ошибка при получении пицц. Попробуйсте снова</p>
+				</div>
+			) : (
+				<div className='content__items'>{status === 'loading' ? skeletons : pizza}</div>
+			)}
+
 			<Pagination currentPage={currentPage} onChangePage={onChangePage} />
 		</>
 	);
