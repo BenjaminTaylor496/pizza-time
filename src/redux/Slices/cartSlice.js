@@ -44,12 +44,16 @@ const cartSlice = createSlice({
 		removePizza(state, action) {
 			state.pizzas = state.pizzas.filter(obj => obj.id !== action.payload);
 		},
+
 		clearPizzas(state) {
 			state.pizzas = [];
 			state.totalPrice = 0;
 		},
 	},
 });
+
+export const selectCart = state => state.cart;
+export const selectCartItemById = id => state => state.cart.pizzas.find(obj => obj.id === id);
 
 export const { addPizza, removePizza, clearPizzas, minusPizza } = cartSlice.actions;
 export default cartSlice.reducer;

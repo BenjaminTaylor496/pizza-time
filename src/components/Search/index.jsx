@@ -1,26 +1,24 @@
-import { useContext, useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import debounce from 'lodash.debounce';
 import { useDispatch } from 'react-redux';
 
 import styles from './Search.module.scss';
-
-import { SearchContext } from '../../App';
+import { setSearchValue } from '../../redux/slices/filterSlice';
 
 export const Search = () => {
-	const [value, setValue] = useState(''); //<== Локальный стэйт внутри компонента Search. Нужен для того, чтобы моментально получать информацию
-	const { setSearchValue } = useContext(SearchContext);
 	const dispatch = useDispatch();
+	const [value, setValue] = useState(''); //<== Локальный стэйт внутри компонента Search. Нужен для того, чтобы моментально получать информацию
 	const inputRef = useRef();
 
 	const onClickClearInput = () => {
-		setSearchValue('');
+		dispatch(setSearchValue(''));
 		setValue(''); // Очищение поля input
 		inputRef.current.focus(); // Фокусировка в поле для ввода после очистки
 	};
 
 	const updateSearchValue = useCallback(
 		debounce(string => {
-			setSearchValue(string);
+			dispatch(setSearchValue(string));
 		}, 350),
 		[],
 	); //<=== сохранение ссылки на функцию и вызов ее через определенное время (в данном проекте  через 350 милисекунд)

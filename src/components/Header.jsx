@@ -4,12 +4,13 @@ import { useSelector } from 'react-redux';
 
 import logoSvg from '../assets/img/myLogo.svg';
 import { Search } from './Search';
+import { selectCart } from '../redux/slices/cartSlice';
 
 /** В реакте когда создаются статичные файлы которые необходимо импортировать, принято писать папку 'assets' <=
  * Папка, где хранятся все статичные ресурсы */
 
 const Header = () => {
-	const { pizzas, totalPrice } = useSelector(state => state.cart);
+	const { pizzas, totalPrice } = useSelector(selectCart);
 
 	const totalCount = pizzas.reduce((sum, pizza) => sum + pizza.count, 0); //Отражаемое количество пицц в header
 

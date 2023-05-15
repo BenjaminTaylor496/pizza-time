@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import CartItems from '../components/CartItems';
 import { CartEmpty } from '../components/CartEmpty';
-import { clearPizzas } from '../redux/slices/cartSlice';
+import { clearPizzas, selectCart } from '../redux/slices/cartSlice';
 
 const Cart = () => {
-	const dispatch = useDispatch;
-	const { totalPrice, pizzas } = useSelector(state => state.cart); // useSelector нужен для того, чтобы вывести все пиццы
+	const dispatch = useDispatch();
+	const { totalPrice, pizzas } = useSelector(selectCart); // useSelector нужен для того, чтобы вывести все пиццы
 
 	const onClickClear = () => {
 		if (window.confirm('Хьуна боккъала а лаьа тускар дасса да?')) {

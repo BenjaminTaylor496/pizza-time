@@ -17,7 +17,7 @@ const CartItems = ({ id, title, type, size, price, count, imageUrl }) => {
 	};
 
 	const onClickRemove = () => {
-		if (window.confirm('Are you sure you want to remove?')) {
+		if (window.confirm('Ты действительно хочешь удалить товар?')) {
 			dispatch(removePizza(id));
 		}
 	};

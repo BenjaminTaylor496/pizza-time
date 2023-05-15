@@ -1,32 +1,34 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPizzas } from '../redux/slices/pizzaSlice';
-import qs from 'qs';
+import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
 import { useNavigate } from 'react-router';
+import qs from 'qs';
 
-import { setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
+import {
+	selectFilter,
+	setCategoryId,
+	setCurrentPage,
+	setFilters,
+} from '../redux/slices/filterSlice';
 import { PizzaBlock } from '../components/PizzaBlock';
 import { MyPizzaSkeleton } from '../components/PizzaBlock/PizzaSkeleton';
-import { SearchContext } from '../App';
+import Sorting, { sortList } from '../components/Sorting';
 import Categories from '../components/Categories';
 import Pagination from '../components/Pagination';
-import Sorting, { sortList } from '../components/Sorting';
 
 const Home = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const isSearch = useRef(false);
 	const isMounted = useRef(false);
 
-	const { items, status } = useSelector(state => state.pizza);
-	const { sort, categoryId, currentPage } = useSelector(state => state.filter);
+	const { items, status } = useSelector(selectPizzaData);
+	const { sort, categoryId, currentPage, searchValue } = useSelector(selectFilter);
 	/** 2 useSelector-а можно превратить в 1, это не обязательно, но это помогает в сокращении кода.
 	 * Тем более, если обращаюсь к одному и тому же filter.
 	 * Переменные categoryId и sort были созданы для того, чтобы потом вытащить state
 	 * Иными словами,c помощью useSelector возвращаю то, что нужно из всего state и передаю в переменную {categoryId и sort}*/
 
 	const sortType = sort.sortProperty;
-	const { searchValue } = useContext(SearchContext);
 	/**context слушает изменение контекста. Если SearchContext изменится, весь компонент перерисуется.
 	 * И в случае его изменении, компоненты, где был использован useContext() будут перерисовываться.*/
 
@@ -86,8 +88,6 @@ const Home = () => {
 	// Если был первый рендер, то запрашиваем пиццы
 	useEffect(() => {
 		getPizzas();
-
-		isSearch.current = false;
 	}, [categoryId, sortType, searchValue, currentPage]);
 
 	useEffect(() => {
@@ -103,7 +103,6 @@ const Home = () => {
 					sort,
 				}),
 			);
-			isSearch.current = true;
 		}
 	}, []); // <=== Парсинг параметров, которые находятся в url
 
