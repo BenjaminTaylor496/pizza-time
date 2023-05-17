@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router-dom';
 import qs from 'qs';
 
 import {
@@ -106,7 +106,11 @@ const Home = () => {
 		}
 	}, []); // <=== Парсинг параметров, которые находятся в url
 
-	const pizza = items.map(obj => <PizzaBlock key={obj.id} {...obj} />);
+	const pizza = items.map(obj => (
+		<Link key={obj.id} to={`/pizza/${obj.id}`}>
+			<PizzaBlock {...obj} />
+		</Link>
+	));
 	const skeletons = [...Array(4)].map((_, index) => <MyPizzaSkeleton key={index} />);
 
 	/**const items = pizzas.filter(obj => {

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 
 const FullPizza = () => {
+	const navigate = useNavigate();
 	const [pizza, setPizza] = useState();
 	const { id } = useParams();
 
@@ -14,7 +15,8 @@ const FullPizza = () => {
 				);
 				setPizza(data);
 			} catch (error) {
-				alert('Error: ' + error);
+				alert('Такой пиццы нету. =(');
+				navigate('/');
 			}
 		}
 
