@@ -1,7 +1,7 @@
-import React from 'react';
+import { FC } from 'react';
 import ContentLoader from 'react-content-loader';
 
-export const MyPizzaSkeleton = () => (
+export const MyPizzaSkeleton: FC = () => (
 	<ContentLoader
 		className='pizza-block' //Данный класс написан для того, чтобы применить стили scss от pizza-block
 		speed={1}

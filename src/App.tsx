@@ -1,6 +1,3 @@
-import React from 'react';
-/**Хук useSelector отвечает за вытаскивание данных из хранилища. Что-то похожее на useContext
- * useDispatch - Хук который говорит "сделай что-то". useDispatch возвращает функцию */
 import { Routes, Route } from 'react-router-dom';
 
 import Home from './pages/Home';

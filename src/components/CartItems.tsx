@@ -1,11 +1,21 @@
-import React from 'react';
+import { FC } from 'react';
 import plus from '../assets/img/plus.png';
 import minus from '../assets/img/minus.png';
 import cancel from '../assets/img/cancel.png';
 import { useDispatch } from 'react-redux';
 import { addPizza, minusPizza, removePizza } from '../redux/slices/cartSlice';
 
-const CartItems = ({ id, title, type, size, price, count, imageUrl }) => {
+type CartItemsProps = {
+	id: string;
+	title: string;
+	type: string;
+	size: number;
+	price: number;
+	count: number;
+	imageUrl: string;
+};
+
+const CartItems: FC<CartItemsProps> = ({ id, title, type, size, price, count, imageUrl }) => {
 	const dispatch = useDispatch();
 
 	const onClickPlus = () => {

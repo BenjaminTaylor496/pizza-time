@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, FC } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
 import { useNavigate, Link } from 'react-router-dom';
@@ -16,7 +16,7 @@ import Sorting, { sortList } from '../components/Sorting';
 import Categories from '../components/Categories';
 import Pagination from '../components/Pagination';
 
-const Home = () => {
+const Home: FC = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const isMounted = useRef(false);
@@ -29,14 +29,12 @@ const Home = () => {
 	 * Иными словами,c помощью useSelector возвращаю то, что нужно из всего state и передаю в переменную {categoryId и sort}*/
 
 	const sortType = sort.sortProperty;
-	/**context слушает изменение контекста. Если SearchContext изменится, весь компонент перерисуется.
-	 * И в случае его изменении, компоненты, где был использован useContext() будут перерисовываться.*/
 
-	const changeCategory = id => {
+	const changeCategory = (id: number) => {
 		dispatch(setCategoryId(id));
 	};
 
-	const onChangePage = pageNum => {
+	const onChangePage = (pageNum: number) => {
 		dispatch(setCurrentPage(pageNum));
 	};
 
@@ -59,6 +57,7 @@ const Home = () => {
 		 */
 
 		dispatch(
+			// @ts-ignore
 			fetchPizzas({
 				sortBy,
 				order,
@@ -106,7 +105,7 @@ const Home = () => {
 		}
 	}, []); // <=== Парсинг параметров, которые находятся в url
 
-	const pizza = items.map(obj => (
+	const pizza = items.map((obj: any) => (
 		<Link key={obj.id} to={`/pizza/${obj.id}`}>
 			<PizzaBlock {...obj} />
 		</Link>

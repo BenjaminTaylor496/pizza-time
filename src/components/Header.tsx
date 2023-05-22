@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -9,11 +9,11 @@ import { selectCart } from '../redux/slices/cartSlice';
 /** В реакте когда создаются статичные файлы которые необходимо импортировать, принято писать папку 'assets' <=
  * Папка, где хранятся все статичные ресурсы */
 
-const Header = () => {
+const Header: FC = () => {
 	const { pizzas, totalPrice } = useSelector(selectCart);
 	const location = useLocation();
 
-	const totalCount = pizzas.reduce((sum, pizza) => sum + pizza.count, 0); //Отражаемое количество пицц в header
+	const totalCount = pizzas.reduce((sum: number, pizza: any) => sum + pizza.count, 0); //Отражаемое количество пицц в header
 
 	return (
 		<div className='header'>

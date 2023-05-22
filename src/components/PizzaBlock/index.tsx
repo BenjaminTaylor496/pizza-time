@@ -1,11 +1,21 @@
-import { useState } from 'react';
+import { useState, FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { addPizza, selectCartItemById } from '../../redux/slices/cartSlice';
 
 const pizzaTypes = ['тонкое', 'традиционное'];
 
-export const PizzaBlock = ({ id, title, price, imageUrl, sizes, types, rating }) => {
+type PizzaBlockProps = {
+	id: string;
+	title: string;
+	price: number;
+	imageUrl: string;
+	sizes: number[];
+	types: number[];
+	rating: number;
+};
+
+export const PizzaBlock: FC<PizzaBlockProps> = ({ id, title, price, imageUrl, sizes, types }) => {
 	const dispatch = useDispatch();
 	const cartItem = useSelector(selectCartItemById(id));
 	const [activeType, setActiveType] = useState(0);

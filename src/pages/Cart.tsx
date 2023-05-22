@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -6,7 +6,7 @@ import CartItems from '../components/CartItems';
 import { CartEmpty } from '../components/CartEmpty';
 import { clearPizzas, selectCart } from '../redux/slices/cartSlice';
 
-const Cart = () => {
+const Cart: FC = () => {
 	const dispatch = useDispatch();
 	const { totalPrice, pizzas } = useSelector(selectCart); // useSelector нужен для того, чтобы вывести все пиццы
 
@@ -20,7 +20,7 @@ const Cart = () => {
 		return <CartEmpty />;
 	}
 
-	const totalCount = pizzas.reduce((sum, pizza) => sum + pizza.count, 0); //Отражаемое количество пицц в header
+	const totalCount = pizzas.reduce((sum: number, pizza: any) => sum + pizza.count, 0); //Отражаемое количество пицц в header
 
 	return (
 		<div className='container container--cart'>
@@ -91,7 +91,7 @@ const Cart = () => {
 					</div>
 				</div>
 				<div className='content__items'>
-					{pizzas.map(item => (
+					{pizzas.map((item: any) => (
 						<CartItems key={item.id} {...item} />
 					))}
 				</div>

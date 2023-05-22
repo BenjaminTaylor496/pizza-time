@@ -1,11 +1,17 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
+import axios from 'axios';
 
-const FullPizza = () => {
-	const navigate = useNavigate();
-	const [pizza, setPizza] = useState();
+const FullPizza: FC = () => {
+	/**Буквы FC(functional component) которые написаны после двоеточия означают, что я задал тип(функционального компонента) странице 'FullPizza'
+	 * Желательно прописывать данные две буквы в каждом компоненте приложения*/
+	const [pizza, setPizza] = useState<{
+		imageUrl: string;
+		title: string;
+		price: number;
+	}>();
 	const { id } = useParams();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		async function fetchPizza() {
@@ -24,7 +30,7 @@ const FullPizza = () => {
 	}, []);
 
 	if (!pizza) {
-		return 'Loading...';
+		return <>Загрузка...</>;
 	} //До того как вытаскивать что-то из undefined, сначала проводится проверка: "нужно ли это делать"
 
 	// console.log(params);

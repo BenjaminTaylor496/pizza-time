@@ -1,29 +1,35 @@
-import { useState, useRef, useCallback } from 'react';
-import debounce from 'lodash.debounce';
+import { useState, useRef, useCallback, FC } from 'react';
 import { useDispatch } from 'react-redux';
+import debounce from 'lodash.debounce';
 
-import styles from './Search.module.scss';
 import { setSearchValue } from '../../redux/slices/filterSlice';
 
-export const Search = () => {
+import styles from './Search.module.scss';
+
+export const Search: FC = () => {
 	const dispatch = useDispatch();
 	const [value, setValue] = useState(''); //<== Локальный стэйт внутри компонента Search. Нужен для того, чтобы моментально получать информацию
-	const inputRef = useRef();
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const onClickClearInput = () => {
 		dispatch(setSearchValue(''));
 		setValue(''); // Очищение поля input
-		inputRef.current.focus(); // Фокусировка в поле для ввода после очистки
+		inputRef.current?.focus(); //Здесь использовался Оператор опциональной последовательности
+		// Если input.current = null, тогда ничего не делай, а если он содержит в себе что-то тогда выполни .focus()
+
+		// if (inputRef.current) {
+		// 	inputRef.current.focus(); // Фокусировка в поле для ввода после очистки
+		// }
 	};
 
 	const updateSearchValue = useCallback(
-		debounce(string => {
-			dispatch(setSearchValue(string));
+		debounce((str: string) => {
+			dispatch(setSearchValue(str));
 		}, 350),
 		[],
 	); //<=== сохранение ссылки на функцию и вызов ее через определенное время (в данном проекте  через 350 милисекунд)
 
-	const onChangeInput = event => {
+	const onChangeInput = (event: any) => {
 		setValue(event.target.value); // При вызове onChangeInput будет меняться input. Данное действие сохранится моментально
 		updateSearchValue(event.target.value); //И вызывать updateSearchValue каждый раз при изменении input.
 	};

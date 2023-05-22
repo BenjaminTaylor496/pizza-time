@@ -1,35 +1,36 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, FC } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectSort, setSort } from '../redux/slices/filterSlice';
 
-export const sortList = [
+type SortPizza = {
+	title: string;
+	sortProperty: string;
+};
+
+export const sortList: SortPizza[] = [
 	{ title: 'популярности (DESC)', sortProperty: 'rating' },
 	{ title: 'популярности (ASC)', sortProperty: '-rating' },
 	{ title: 'цене (DESC)', sortProperty: 'price' },
 	{ title: 'цене (ASC)', sortProperty: '-price' },
 	{ title: 'алфавиту (DESC)', sortProperty: 'title' },
 	{ title: 'алфавиту (ASC)', sortProperty: '-title' },
-	/**Данный массив объектов был сделан для того, чтобы когда буду выбирать сортировку пицц не передавать индекс конкретной сортировки
-	 * И чтобы в ссылку mockAPI прописать сортировку по "цене", "алфавиту" и т.д
-	 * Иными словами, если будет выбрана сортировка по "популярности" передавать то, что есть в sortProperty
-	 */
 ];
 
-const Sorting = () => {
+const Sorting: FC = () => {
 	const dispatch = useDispatch();
 	const sort = useSelector(selectSort);
-	const sortRef = useRef();
+	const sortRef = useRef<HTMLDivElement>(null);
 
 	const [isVisible, setIsVisible] = useState(false);
 
-	const changeSortMenu = obj => {
+	const changeSortMenu = (obj: SortPizza) => {
 		dispatch(setSort(obj));
 		setIsVisible(false);
 	};
 
 	useEffect(() => {
-		const handleClickOutside = event => {
+		const handleClickOutside = (event: any) => {
 			if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
 				// console.log('EVENT!');
 				setIsVisible(false);
