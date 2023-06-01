@@ -227,7 +227,7 @@ body {
 			width: 13%;
 
 			&-minus {
-				svg {
+				img {
 					path:first-of-type {
 						display: none;
 					}
@@ -244,12 +244,12 @@ body {
 					&:hover {
 						background-color: transparent;
 
-						svg path {
+						img path {
 							fill: #787878;
 						}
 					}
 
-					svg path {
+					img path {
 						fill: #787878;
 					}
 				}

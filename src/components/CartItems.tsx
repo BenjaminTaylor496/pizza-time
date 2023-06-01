@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { FC } from 'react';
+import clsx from 'clsx';
 
 import { addPizza, CartItem, minusPizza, removePizza } from '../redux/slices/cartSlice';
 import cancel from '../assets/img/cancel.png';
@@ -45,21 +46,24 @@ const CartItems: FC<CartItemsProps> = ({ id, title, type, size, price, count, im
 				</p>
 			</div>
 			<div className='cart__item-count'>
-				<div className='button button--outline button--circle cart__item-count-minus'>
-					<img onClick={onClickMinus} src={minus} alt='minus' />
-				</div>
+				<button
+					disabled={count === 1}
+					onClick={onClickMinus}
+					className='button button--outline button--circle cart__item-count-minus'>
+					<img src={minus} alt='minus' />
+				</button>
 				<b>{count}</b>
-				<div className='button button--outline button--circle cart__item-count-plus'>
+				<button className='button button--outline button--circle cart__item-count-plus'>
 					<img onClick={onClickPlus} src={plus} alt='plus' />
-				</div>
+				</button>
 			</div>
 			<div className='cart__item-price'>
 				<b>{price * count} ₽</b>
 			</div>
 			<div className='cart__item-remove'>
-				<div className='button button--outline button--circle'>
-					<img onClick={onClickRemove} width={10} src={cancel} alt='cancel' />
-				</div>
+				<button onClick={onClickRemove} className='button button--outline button--circle'>
+					<img width={10} src={cancel} alt='cancel' />
+				</button>
 			</div>
 		</div>
 	);

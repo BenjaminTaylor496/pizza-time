@@ -1,10 +1,10 @@
-import { FC } from 'react';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { FC } from 'react';
 
-import CartItems from '../components/CartItems';
-import { CartEmpty } from '../components/CartEmpty';
 import { clearPizzas, selectCart } from '../redux/slices/cartSlice';
+import { CartEmpty } from '../components/CartEmpty';
+import CartItems from '../components/CartItems';
 
 const Cart: FC = () => {
 	const dispatch = useDispatch();
@@ -98,11 +98,9 @@ const Cart: FC = () => {
 				<div className='cart__bottom'>
 					<div className='cart__bottom-details'>
 						<span>
-							{' '}
 							Всего пицц: <b>{totalCount} шт.</b>{' '}
 						</span>
 						<span>
-							{' '}
 							Сумма заказа: <b>{totalPrice} ₽</b>{' '}
 						</span>
 					</div>
