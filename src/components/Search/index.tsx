@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, FC } from 'react';
+import { ChangeEvent, useState, useCallback, useRef, FC } from 'react';
 import { useDispatch } from 'react-redux';
 import debounce from 'lodash.debounce';
 
@@ -29,7 +29,7 @@ export const Search: FC = () => {
 		[],
 	); //<=== сохранение ссылки на функцию и вызов ее через определенное время (в данном проекте  через 350 милисекунд)
 
-	const onChangeInput = (event: any) => {
+	const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
 		setValue(event.target.value); // При вызове onChangeInput будет меняться input. Данное действие сохранится моментально
 		updateSearchValue(event.target.value); //И вызывать updateSearchValue каждый раз при изменении input.
 	};

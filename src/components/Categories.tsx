@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
 type CategoriesProps = {
-	value: number;
-	changeCategory: any;
+	value: number; //Если до двоеточия стоит "?", то это является опциональным параметром
+	changeCategory: (idx: number) => void; //Типизировал функцию changeCategory(Просто должна вызываться c 1 аргументом index c типoм number)
 };
 
 const Categories: FC<CategoriesProps> = ({ value, changeCategory }) => {

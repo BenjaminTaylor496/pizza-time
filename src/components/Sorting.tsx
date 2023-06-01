@@ -1,20 +1,20 @@
 import { useState, useRef, useEffect, FC } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectSort, setSort } from '../redux/slices/filterSlice';
+import { selectSort, setSort, sortPropertyEnum } from '../redux/slices/filterSlice';
 
 type SortPizza = {
 	title: string;
-	sortProperty: string;
+	sortProperty: sortPropertyEnum;
 };
 
 export const sortList: SortPizza[] = [
-	{ title: 'популярности (DESC)', sortProperty: 'rating' },
-	{ title: 'популярности (ASC)', sortProperty: '-rating' },
-	{ title: 'цене (DESC)', sortProperty: 'price' },
-	{ title: 'цене (ASC)', sortProperty: '-price' },
-	{ title: 'алфавиту (DESC)', sortProperty: 'title' },
-	{ title: 'алфавиту (ASC)', sortProperty: '-title' },
+	{ title: 'популярности (DESC)', sortProperty: sortPropertyEnum.RATING_DESC },
+	{ title: 'популярности (ASC)', sortProperty: sortPropertyEnum.RATING_ASC },
+	{ title: 'цене (DESC)', sortProperty: sortPropertyEnum.PRICE_DESC },
+	{ title: 'цене (ASC)', sortProperty: sortPropertyEnum.PRICE_ASC },
+	{ title: 'алфавиту (DESC)', sortProperty: sortPropertyEnum.TITLE_DESC },
+	{ title: 'алфавиту (ASC)', sortProperty: sortPropertyEnum.TITLE_ASC },
 ];
 
 const Sorting: FC = () => {
@@ -30,19 +30,18 @@ const Sorting: FC = () => {
 	};
 
 	useEffect(() => {
-		const handleClickOutside = (event: any) => {
+		const onClickOutside = (event: Event) => {
 			if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
-				// console.log('EVENT!');
 				setIsVisible(false);
 			}
 		};
-		document.body.addEventListener('click', handleClickOutside);
+		document.body.addEventListener('click', onClickOutside); // ОБЯЗАТЕЛЬНО СЮДА ВЕРНУТЬСЯ И ИСПРАВИТЬ ОШИБКИ! УРОК №23 36 минута
+		console.log(onClickOutside);
 
 		return () => {
-			// console.log('sort unmount');
-			document.body.removeEventListener('click', handleClickOutside);
+			document.body.removeEventListener('click', onClickOutside);
 		};
-	}, []); //!!Обычно нельзя обращаться к 'document.', но так можно делать если хочу обработчик клика навешать на самый главный "родитель"
+	}, []); //!!Обычно нельзя обращаться к 'document.', но так можно делать если необходимо обработчик клика навешать на самый главный "родитель"
 
 	return (
 		<div ref={sortRef} className='sort'>

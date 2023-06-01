@@ -1,7 +1,7 @@
 import { useEffect, useRef, FC } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
 import { useNavigate, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 import qs from 'qs';
 
 import {
@@ -10,18 +10,20 @@ import {
 	setCurrentPage,
 	setFilters,
 } from '../redux/slices/filterSlice';
+import { fetchPizzas, SearchPizzaParams, selectPizzaData } from '../redux/slices/pizzaSlice';
 import { PizzaBlock } from '../components/PizzaBlock';
 import { MyPizzaSkeleton } from '../components/PizzaBlock/PizzaSkeleton';
+import { useAppDispatch, RootState } from '../redux/store';
 import Sorting, { sortList } from '../components/Sorting';
 import Categories from '../components/Categories';
 import Pagination from '../components/Pagination';
 
 const Home: FC = () => {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const isMounted = useRef(false);
 
-	const { items, status } = useSelector(selectPizzaData);
+	const { items, status } = useSelector((state: RootState) => state.pizza);
 	const { sort, categoryId, currentPage, searchValue } = useSelector(selectFilter);
 	/** 2 useSelector-а можно превратить в 1, это не обязательно, но это помогает в сокращении кода.
 	 * Тем более, если обращаюсь к одному и тому же filter.
@@ -57,59 +59,60 @@ const Home: FC = () => {
 		 */
 
 		dispatch(
-			// @ts-ignore
 			fetchPizzas({
 				sortBy,
 				order,
 				category,
 				search,
-				currentPage,
+				currentPage: String(currentPage),
 			}),
 		);
+		// "@ts-ignore"- позволяет игнорировать
 
 		window.scrollTo(0, 0);
 	};
-
-	//Если был первый рендер, то только тогда проверяй изменениe параметров, нужно ли их вшивать в URL или не нужно
-	useEffect(() => {
-		if (isMounted.current) {
-			const queryString = qs.stringify({
-				sortProperty: sort.sortProperty,
-				categoryId,
-				currentPage,
-			});
-
-			navigate(`?${queryString}`);
-		}
-		isMounted.current = true;
-	}, [categoryId, sortType, currentPage]);
 
 	// Если был первый рендер, то запрашиваем пиццы
 	useEffect(() => {
 		getPizzas();
 	}, [categoryId, sortType, searchValue, currentPage]);
 
-	useEffect(() => {
-		// Если был первый рендер, то проеверяем URL-параметры и сохраняем в редуксе
-		if (window.location.search) {
-			const params = qs.parse(window.location.search.substring(1));
+	// useEffect(() => {
+	// 	// Если был первый рендер, то проеверяем URL-параметры и сохраняем в редуксе
+	// 	if (window.location.search) {
+	// 		const params = qs.parse(window.location.search.substring(1)) as unknown as SearchPizzaParams;
+	// 		const sort = sortList.find(obj => obj.sortProperty === params.sortBy);
+	// 		dispatch(
+	// 			setFilters({
+	// 				searchValue: params.search,
+	// 				categoryId: Number(params.category),
+	// 				currentPage: Number(params.currentPage),
+	// 				sort: sort || sortList[0],
+	// 			}),
+	// 		);
+	// 	}
+	// 	isMounted.current = true;
+	// }, []); // <=== Парсинг параметров, которые находятся в url
 
-			const sort = sortList.find(obj => obj.sortProperty === params.sortProperty);
+	//Если был первый рендер, то только тогда проверяй изменениe параметров, нужно ли их вшивать в URL или не нужно
+	// useEffect(() => {
+	// 	if (isMounted.current) {
+	// 		const params = {
+	// 			categoryId: categoryId > 0 ? categoryId : null,
+	// 			sortProperty: sort.sortProperty,
+	// 			currentPage,
+	// 		};
+	// 		const queryString = qs.stringify(params, { skipNulls: true });
 
-			dispatch(
-				setFilters({
-					...params,
-					sort,
-				}),
-			);
-		}
-	}, []); // <=== Парсинг параметров, которые находятся в url
+	// 		navigate(`/?${queryString}`);
+	// 	}
 
-	const pizza = items.map((obj: any) => (
-		<Link key={obj.id} to={`/pizza/${obj.id}`}>
-			<PizzaBlock {...obj} />
-		</Link>
-	));
+	// 	if (!window.location.search) {
+	// 		dispatch(fetchPizzas({} as SearchPizzaParams));
+	// 	}
+	// }, [categoryId, sortType, currentPage]);
+
+	const pizza = items.map((obj: any) => <PizzaBlock {...obj} />);
 	const skeletons = [...Array(4)].map((_, index) => <MyPizzaSkeleton key={index} />);
 
 	/**const items = pizzas.filter(obj => {

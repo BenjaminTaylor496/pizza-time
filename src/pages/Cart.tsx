@@ -8,7 +8,7 @@ import { clearPizzas, selectCart } from '../redux/slices/cartSlice';
 
 const Cart: FC = () => {
 	const dispatch = useDispatch();
-	const { totalPrice, pizzas } = useSelector(selectCart); // useSelector нужен для того, чтобы вывести все пиццы
+	const { totalPrice, items } = useSelector(selectCart); // useSelector нужен для того, чтобы вывести все пиццы
 
 	const onClickClear = () => {
 		if (window.confirm('Хьуна боккъала а лаьа тускар дасса да?')) {
@@ -20,7 +20,7 @@ const Cart: FC = () => {
 		return <CartEmpty />;
 	}
 
-	const totalCount = pizzas.reduce((sum: number, pizza: any) => sum + pizza.count, 0); //Отражаемое количество пицц в header
+	const totalCount = items.reduce((sum: number, pizza: any) => sum + pizza.count, 0); //Отражаемое количество пицц в header
 
 	return (
 		<div className='container container--cart'>
@@ -91,7 +91,7 @@ const Cart: FC = () => {
 					</div>
 				</div>
 				<div className='content__items'>
-					{pizzas.map((item: any) => (
+					{items.map((item: any) => (
 						<CartItems key={item.id} {...item} />
 					))}
 				</div>

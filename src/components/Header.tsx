@@ -10,10 +10,10 @@ import { selectCart } from '../redux/slices/cartSlice';
  * Папка, где хранятся все статичные ресурсы */
 
 const Header: FC = () => {
-	const { pizzas, totalPrice } = useSelector(selectCart);
+	const { items, totalPrice } = useSelector(selectCart);
 	const location = useLocation();
 
-	const totalCount = pizzas.reduce((sum: number, pizza: any) => sum + pizza.count, 0); //Отражаемое количество пицц в header
+	const totalCount = items.reduce((sum: number, pizza: any) => sum + pizza.count, 0); //Отражаемое количество пицц в header
 
 	return (
 		<div className='header'>
