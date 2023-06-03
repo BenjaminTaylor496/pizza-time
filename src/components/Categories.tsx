@@ -1,13 +1,14 @@
-import { FC } from 'react';
+// import { useWhyDidYouUpdate } from 'ahooks';
+import { FC, memo } from 'react';
 
 type CategoriesProps = {
 	value: number; //Если до двоеточия стоит "?", то это является опциональным параметром
 	changeCategory: (idx: number) => void; //Типизировал функцию changeCategory(Просто должна вызываться c 1 аргументом index c типoм number)
 };
 
-const Categories: FC<CategoriesProps> = ({ value, changeCategory }) => {
-	const categories = ['Все', 'Мясные', 'Вегuтарuанское', 'Грuль', 'Острые', 'Закрытые'];
+const categories: string[] = ['Все', 'Мясные', 'Вегuтарuанское', 'Грuль', 'Острые', 'Закрытые'];
 
+const Categories: FC<CategoriesProps> = memo(({ value, changeCategory }) => {
 	return (
 		<div className='categories'>
 			<ul>
@@ -36,6 +37,6 @@ const Categories: FC<CategoriesProps> = ({ value, changeCategory }) => {
 			</ul>
 		</div>
 	);
-};
+});
 
 export default Categories;

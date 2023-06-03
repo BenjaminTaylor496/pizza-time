@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect, FC } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState, useRef, useEffect, memo, FC } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { selectSort, setSort, sortPropertyEnum } from '../redux/slices/filterSlice';
+import { setSort, sortPropertyEnum } from '../redux/slices/filterSlice';
+import { SortType } from '../redux/slices/filterSlice';
 
 type SortPizza = {
 	title: string;
@@ -11,15 +12,18 @@ type SortPizza = {
 export const sortList: SortPizza[] = [
 	{ title: 'популярности (DESC)', sortProperty: sortPropertyEnum.RATING_DESC },
 	{ title: 'популярности (ASC)', sortProperty: sortPropertyEnum.RATING_ASC },
-	{ title: 'цене (DESC)', sortProperty: sortPropertyEnum.PRICE_DESC },
-	{ title: 'цене (ASC)', sortProperty: sortPropertyEnum.PRICE_ASC },
 	{ title: 'алфавиту (DESC)', sortProperty: sortPropertyEnum.TITLE_DESC },
 	{ title: 'алфавиту (ASC)', sortProperty: sortPropertyEnum.TITLE_ASC },
+	{ title: 'цене (DESC)', sortProperty: sortPropertyEnum.PRICE_DESC },
+	{ title: 'цене (ASC)', sortProperty: sortPropertyEnum.PRICE_ASC },
 ];
 
-const Sorting: FC = () => {
+type SortingProps = {
+	value: SortType;
+};
+
+const Sorting: FC<SortingProps> = memo(({ value }) => {
 	const dispatch = useDispatch();
-	const sort = useSelector(selectSort);
 	const sortRef = useRef<HTMLDivElement>(null);
 
 	const [isVisible, setIsVisible] = useState(false);
@@ -36,7 +40,6 @@ const Sorting: FC = () => {
 			}
 		};
 		document.body.addEventListener('click', onClickOutside); // ОБЯЗАТЕЛЬНО СЮДА ВЕРНУТЬСЯ И ИСПРАВИТЬ ОШИБКИ! УРОК №23 36 минута
-		console.log(onClickOutside);
 
 		return () => {
 			document.body.removeEventListener('click', onClickOutside);
@@ -58,7 +61,7 @@ const Sorting: FC = () => {
 					/>
 				</svg>
 				<b>Сортировка по:</b>
-				<span onClick={() => setIsVisible(!isVisible)}>{sort.title}</span>
+				<span onClick={() => setIsVisible(!isVisible)}>{value.title}</span>
 				{/** При помощи {sorttitle} сделал так, что при выборе какого-то элемента из массива, sortList заменит собой предыдущее значение
 				 * Например: было: Сортировка по: цене;
 				 * Стало: Сортировка по: алфавиту*/}
@@ -70,7 +73,7 @@ const Sorting: FC = () => {
 							<li
 								key={i}
 								onClick={() => changeSortMenu(obj)}
-								className={sort.sortProperty === obj.sortProperty ? 'active' : ''}>
+								className={value.sortProperty === obj.sortProperty ? 'active' : ''}>
 								{obj.title}
 							</li>
 						))}
@@ -79,6 +82,5 @@ const Sorting: FC = () => {
 			)}
 		</div>
 	);
-};
-
+});
 export default Sorting;

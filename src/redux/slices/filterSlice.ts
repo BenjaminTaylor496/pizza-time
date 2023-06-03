@@ -3,10 +3,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
 export enum sortPropertyEnum {
-	PRICE_DESC = 'price',
-	PRICE_ASC = '-price',
 	RATING_DESC = 'rating',
 	RATING_ASC = '-rating',
+	PRICE_DESC = 'price',
+	PRICE_ASC = '-price',
 	TITLE_DESC = 'title',
 	TITLE_ASC = '-title',
 }

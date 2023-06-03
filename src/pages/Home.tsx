@@ -1,7 +1,6 @@
-import { useEffect, useRef, FC } from 'react';
+import { useEffect, useRef, useCallback, FC } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
 import qs from 'qs';
 
 import {
@@ -13,7 +12,7 @@ import {
 import { fetchPizzas, SearchPizzaParams, selectPizzaData } from '../redux/slices/pizzaSlice';
 import { PizzaBlock } from '../components/PizzaBlock';
 import { MyPizzaSkeleton } from '../components/PizzaBlock/PizzaSkeleton';
-import { useAppDispatch, RootState } from '../redux/store';
+import { useAppDispatch } from '../redux/store';
 import Sorting, { sortList } from '../components/Sorting';
 import Categories from '../components/Categories';
 import Pagination from '../components/Pagination';
@@ -23,7 +22,7 @@ const Home: FC = () => {
 	const dispatch = useAppDispatch();
 	const isMounted = useRef(false);
 
-	const { items, status } = useSelector((state: RootState) => state.pizza);
+	const { items, status } = useSelector(selectPizzaData);
 	const { sort, categoryId, currentPage, searchValue } = useSelector(selectFilter);
 	/** 2 useSelector-а можно превратить в 1, это не обязательно, но это помогает в сокращении кода.
 	 * Тем более, если обращаюсь к одному и тому же filter.
@@ -32,9 +31,9 @@ const Home: FC = () => {
 
 	const sortType = sort.sortProperty;
 
-	const changeCategory = (id: number) => {
+	const changeCategory = useCallback((id: number) => {
 		dispatch(setCategoryId(id));
-	};
+	}, []);
 
 	const onChangePage = (pageNum: number) => {
 		dispatch(setCurrentPage(pageNum));
@@ -112,7 +111,7 @@ const Home: FC = () => {
 	// 	}
 	// }, [categoryId, sortType, currentPage]);
 
-	const pizza = items.map((obj: any) => <PizzaBlock {...obj} />);
+	const pizza = items.map((obj: any) => <PizzaBlock key={obj.id} {...obj} />);
 	const skeletons = [...Array(4)].map((_, index) => <MyPizzaSkeleton key={index} />);
 
 	/**const items = pizzas.filter(obj => {
@@ -126,9 +125,8 @@ const Home: FC = () => {
 	return (
 		<>
 			<div className='content__top'>
-				{/* <button onClick={click}> CheckSortBy</button> */}
 				<Categories value={categoryId} changeCategory={changeCategory} />
-				<Sorting />
+				<Sorting value={sort} />
 			</div>
 			<h2 className='content__title'>Все пиццы:</h2>
 			{status === 'error' ? (
