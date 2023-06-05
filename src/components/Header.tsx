@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import logoSvg from '../assets/img/myLogo.svg';
 import { Search } from './Search';
+import logoSvg from '../assets/img/myLogo.svg';
 import { selectCart } from '../redux/slices/cartSlice';
 
 /** В реакте когда создаются статичные файлы которые необходимо импортировать, принято писать папку 'assets' <=
@@ -12,8 +12,17 @@ import { selectCart } from '../redux/slices/cartSlice';
 const Header: FC = () => {
 	const { items, totalPrice } = useSelector(selectCart);
 	const location = useLocation();
+	const isMounted = useRef(false);
 
 	const totalCount = items.reduce((sum: number, pizza: any) => sum + pizza.count, 0); //Отражаемое количество пицц в header
+
+	useEffect(() => {
+		if (isMounted.current) {
+			const json = JSON.stringify(items); //Перевел массив в строку
+			localStorage.setItem('cart', json);
+		}
+		isMounted.current = true;
+	}, [items]);
 
 	return (
 		<div className='header'>
