@@ -1,8 +1,10 @@
-import { useState, FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useState, FC } from 'react';
 
-import { addPizza, CartItem, selectCartItemById } from '../../redux/slices/cartSlice';
+import { selectCartItemById } from '../../redux/cart/selectors';
+import { addPizza } from '../../redux/cart/slice';
+import { CartItem } from '../../redux/cart/types';
 
 const pizzaTypes = ['тонкое', 'традиционное'];
 

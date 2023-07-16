@@ -1,5 +1,5 @@
-import { FC } from 'react';
 import ReactPaginate from 'react-paginate';
+import { FC } from 'react';
 
 import styles from './Pagination.module.scss';
 

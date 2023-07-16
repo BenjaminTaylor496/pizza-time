@@ -1,8 +1,8 @@
 import { useDispatch } from 'react-redux';
 import { FC } from 'react';
-import clsx from 'clsx';
 
-import { addPizza, CartItem, minusPizza, removePizza } from '../redux/slices/cartSlice';
+import { addPizza, minusPizza, removePizza } from '../redux/cart/slice';
+import { CartItem } from '../redux/cart/types';
 import cancel from '../assets/img/cancel.png';
 import minus from '../assets/img/minus.png';
 import plus from '../assets/img/plus.png';

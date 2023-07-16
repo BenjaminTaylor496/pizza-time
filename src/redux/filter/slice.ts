@@ -1,27 +1,7 @@
 /** Отвечает за фильтрацию товара в приложении */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store';
 
-export enum sortPropertyEnum {
-	RATING_DESC = 'rating',
-	RATING_ASC = '-rating',
-	PRICE_DESC = 'price',
-	PRICE_ASC = '-price',
-	TITLE_DESC = 'title',
-	TITLE_ASC = '-title',
-}
-
-export type SortType = {
-	title: string;
-	sortProperty: sortPropertyEnum;
-};
-
-export interface FilterSliceState {
-	searchValue: string;
-	categoryId: number;
-	currentPage: number;
-	sort: SortType;
-}
+import { FilterSliceState, sortPropertyEnum, SortType } from './types';
 
 const initialState: FilterSliceState = {
 	searchValue: '',
@@ -29,7 +9,7 @@ const initialState: FilterSliceState = {
 	currentPage: 1,
 	sort: {
 		title: 'популярности',
-		sortProperty: sortPropertyEnum.PRICE_DESC,
+		sortProperty: sortPropertyEnum.RATING_DESC,
 	},
 };
 
@@ -70,9 +50,6 @@ const filterSlice = createSlice({
 		},
 	},
 });
-
-export const selectSort = (state: RootState) => state.filter.sort;
-export const selectFilter = (state: RootState) => state.filter;
 
 export const { setCategoryId, setSort, setCurrentPage, setFilters, setSearchValue } =
 	filterSlice.actions;

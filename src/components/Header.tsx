@@ -2,9 +2,9 @@ import { FC, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { Search } from './Search';
+import { selectCart } from '../redux/cart/selectors';
 import logoSvg from '../assets/img/myLogo.svg';
-import { selectCart } from '../redux/slices/cartSlice';
+import { Search } from './Search';
 
 /** В реакте когда создаются статичные файлы которые необходимо импортировать, принято писать папку 'assets' <=
  * Папка, где хранятся все статичные ресурсы */

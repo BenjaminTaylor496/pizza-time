@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect, memo, FC } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setSort, sortPropertyEnum } from '../redux/slices/filterSlice';
-import { SortType } from '../redux/slices/filterSlice';
+import { sortPropertyEnum } from '../redux/filter/types';
+import { SortType } from '../redux/filter/types';
+import { setSort } from '../redux/filter/slice';
 
 type SortPizza = {
 	title: string;

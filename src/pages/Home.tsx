@@ -3,19 +3,22 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import qs from 'qs';
 
-import {
-	selectFilter,
-	setCategoryId,
-	setCurrentPage,
-	setFilters,
-} from '../redux/slices/filterSlice';
-import { fetchPizzas, SearchPizzaParams, selectPizzaData } from '../redux/slices/pizzaSlice';
-import { PizzaBlock } from '../components/PizzaBlock';
-import { MyPizzaSkeleton } from '../components/PizzaBlock/PizzaSkeleton';
-import { useAppDispatch } from '../redux/store';
-import Sorting, { sortList } from '../components/Sorting';
 import Categories from '../components/Categories';
 import Pagination from '../components/Pagination';
+
+import { setCategoryId, setCurrentPage, setFilters } from '../redux/filter/slice';
+import { MyPizzaSkeleton } from '../components/PizzaBlock/PizzaSkeleton';
+import { selectPizzaData } from '../redux/pizza/selectors';
+import { SearchPizzaParams } from '../redux/pizza/types';
+import { selectFilter } from '../redux/filter/selectors';
+import Sorting, { sortList } from '../components/Sorting';
+import { fetchPizzas } from '../redux/pizza/slice';
+import { PizzaBlock } from '../components/PizzaBlock';
+import { useAppDispatch } from '../redux/store';
+
+import('../utils/math').then(math => {
+	console.log(math.add(122, 211));
+});
 
 const Home: FC = () => {
 	const navigate = useNavigate();

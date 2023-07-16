@@ -1,5 +1,5 @@
-import { FC } from 'react';
 import ContentLoader from 'react-content-loader';
+import { FC } from 'react';
 
 export const MyPizzaSkeleton: FC = () => (
 	<ContentLoader

@@ -1,45 +1,14 @@
 /** Отвечает за корзину с товарами в приложении */
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store';
 import axios from 'axios';
+
+import { Pizza, PizzaSliceState, SearchPizzaParams, Status } from './types';
 
 // type FetchPizzasArgs = Record<string, string>
 /**С помощью Record<> можно все значения в объекте сделать в 1 типе.
  * Например, есть объект в котором все значения иимеют тип 'number'.
  * То в таком случае пишу следующее: Record<string, number>.
  * Или если все значения являются строчками: Record<string, string> и т.д */
-
-type Pizza = {
-	id: string;
-	title: string;
-	price: number;
-	imageUrl: string;
-	sizes: number[];
-	types: number[];
-	rating: number;
-};
-
-export enum Status {
-	/**!Примечание: Когда пишется ключ в enum принято этот ключ писать большими буквами
-	 * Ключ обязательно большими буквами, а зачение может быть написан как угодно
-	 * ВАЖНОЕ ПРИМЕЧАНИЕ! enum - не замена объекту*/
-	LOADING = 'loading',
-	SUCCESS = 'success',
-	ERROR = 'error',
-}
-
-interface PizzaSliceState {
-	items: Pizza[];
-	status: Status;
-}
-
-export type SearchPizzaParams = {
-	sortBy: string;
-	order: string;
-	category: string;
-	search: string;
-	currentPage: string;
-};
 
 export const fetchPizzas = createAsyncThunk<Pizza[], SearchPizzaParams>(
 	'pizza/fetchPizzasStatus',
@@ -106,8 +75,6 @@ const pizzaSlice = createSlice({
 	// 	},
 	// },
 });
-
-export const selectPizzaData = (state: RootState) => state.pizza;
 
 export const { setItems } = pizzaSlice.actions;
 export default pizzaSlice.reducer;

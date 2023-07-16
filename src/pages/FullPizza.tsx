@@ -1,5 +1,5 @@
-import { FC, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
+import { FC, useEffect, useState } from 'react';
 import axios from 'axios';
 
 const FullPizza: FC = () => {
